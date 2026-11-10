@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>แต่งตัวฮีโร่</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mali:wght@600;700&display=swap">
+<style>
+/* Layout: hero stands on a little stage at the top; big picture-tabs and swatches below. Original hero parts only. */
+:root{--cream:#fff7ee;--ink:#5b4636;--soft:#9a8574;--berry:#f2768c;--berry-d:#d95a72;--sun:#ffd166;--mint-d:#4fb784;--sky:#7cc0ef;--lav:#b79ce8;
+  --shadow:0 6px 0 rgba(91,70,54,.13);--font:'Mali','Sarabun','Noto Sans Thai',system-ui,sans-serif;color-scheme:light}
+[hidden]{display:none!important}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{font-family:var(--font);color:var(--ink);font-weight:600;overflow:hidden;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;
+  background:radial-gradient(40vmax 30vmax at 0% 0%,#ffe3d2,transparent 70%),radial-gradient(40vmax 30vmax at 100% 100%,#e9e0fb,transparent 70%),var(--cream)}
+button{font-family:inherit;color:inherit;font-weight:700;border:0;cursor:pointer}
+button:focus-visible,a:focus-visible{outline:4px solid var(--sky);outline-offset:3px}
+.app{height:100%;display:flex;flex-direction:column;max-width:560px;margin:0 auto;padding:max(10px,env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) 0 max(12px,env(safe-area-inset-left,0px))}
+.top{display:flex;align-items:center;gap:10px}
+.round{width:52px;height:52px;border-radius:50%;background:#fff;box-shadow:var(--shadow);font-size:24px;display:grid;place-items:center;flex:none;text-decoration:none;color:var(--ink)}
+.top h1{flex:1;margin:0;text-align:center;font-size:clamp(22px,6.5vw,30px);color:var(--berry)}
+.stage{position:relative;margin-top:10px;border-radius:30px;overflow:hidden;box-shadow:var(--shadow);border:4px solid #fff;
+  background:linear-gradient(#bfe6ff,#e8f6ff 60%,#cdeedd 60%,#bde5cf);flex:none;height:min(44vh,360px)}
+.stage svg{position:absolute;left:50%;bottom:4%;height:92%;transform:translateX(-50%);overflow:visible}
+.stage .cloud{position:absolute;background:#fff;border-radius:999px;opacity:.85}
+.hero{transform-origin:150px 400px;animation:idle 2.4s ease-in-out infinite}
+.hero.fly{animation:fly 1.6s ease-in-out}
+@keyframes idle{50%{transform:translateY(-4px)}}
+@keyframes fly{0%{transform:none}40%{transform:translateY(-120px) rotate(-6deg)}70%{transform:translateY(-120px) rotate(6deg)}100%{transform:none}}
+.name{position:absolute;left:12px;top:10px;background:rgba(255,255,255,.92);border-radius:999px;padding:4px 14px;font-size:18px}
+.acts{position:absolute;right:10px;top:10px;display:flex;flex-direction:column;gap:8px}
+.acts button{width:52px;height:52px;border-radius:50%;background:#fff;font-size:24px;box-shadow:0 4px 0 rgba(91,70,54,.15)}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:12px 2px 8px;scrollbar-width:none;flex:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;background:#fff;border-radius:20px;padding:6px 12px;box-shadow:0 4px 0 rgba(91,70,54,.12);display:flex;flex-direction:column;align-items:center;font-size:13px;min-width:64px}
+.tab .i{font-size:26px;line-height:1.2}
+.tab[aria-selected="true"]{background:var(--sun)}
+.panel{flex:1;overflow-y:auto;padding:4px 2px calc(16px + env(safe-area-inset-bottom,0px))}
+.opts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.opt{background:#fff;border-radius:20px;aspect-ratio:1;box-shadow:0 4px 0 rgba(91,70,54,.12);display:grid;place-items:center;padding:6px}
+.opt svg{width:100%;height:100%}
+.opt[aria-pressed="true"]{box-shadow:0 0 0 4px var(--berry),0 4px 0 rgba(91,70,54,.12)}
+.sw{border-radius:50%;aspect-ratio:1;box-shadow:inset 0 0 0 4px rgba(255,255,255,.7),0 4px 0 rgba(91,70,54,.15)}
+.sw[aria-pressed="true"]{box-shadow:inset 0 0 0 4px #fff,0 0 0 4px var(--berry)}
+.sub{margin:14px 0 8px;font-size:15px;color:var(--soft)}
+.opt:active,.tab:active,.acts button:active,.round:active{transform:scale(.94)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style></head><body>
+<div class="app">
+  <div class="top">
+    <a class="round" href="index.html" aria-label="กลับไปหน้ารวมเกม">🏠</a>
+    <h1>แต่งตัวฮีโร่</h1>
+    <button class="round" id="sayName" type="button" aria-label="ฟังชื่อฮีโร่">🔊</button>
+  </div>
+  <div class="stage" id="stage">
+    <span class="cloud" style="left:8%;top:30%;width:70px;height:26px"></span>
+    <span class="cloud" style="left:62%;top:18%;width:90px;height:30px"></span>
+    <span class="name" id="heroName">ฮีโร่ดาวเด่น</span>
+    <div class="acts">
+      <button type="button" id="rnd" aria-label="สุ่มชุด">🎲</button>
+      <button type="button" id="flyBtn" aria-label="ให้ฮีโร่บิน">🚀</button>
+    </div>
+    <svg viewBox="0 0 300 420" id="heroSvg" aria-label="ฮีโร่ของหนู"></svg>
+  </div>
+  <div class="tabs" role="tablist" id="tabs"></div>
+  <div class="panel" id="panel"></div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const INK='#4a3628',ST=`stroke="${INK}" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"`;
+const SKIN=['#ffe0c7','#f6c9a0','#e0a878','#b9784f','#8a5636','#5e3a24'];
+const HAIRC=['#2d2220','#6b4126','#c98a3d','#f2d36b','#e8653f','#8f6fd0','#4fb784','#f2768c'];
+const SUIT=['#e8453c','#2f6fd6','#3fae6a','#f2b632','#8f5cd0','#ff8fb1','#22b3c4','#36363e','#ffffff','#ff8a3d'];
+const S={skin:1,eyes:0,nose:0,mouth:0,hair:0,hairC:1,mask:1,maskC:7,suit:0,suit2:3,pat:0,emb:0,embC:3,cape:1,capeC:3,boots:0,bootC:7};
+const NAMES=['ดาวเด่น','หัวใจกล้า','ใบไม้เขียว','พระจันทร์','อุ้งเท้าน้อย','ดอกไม้บาน','สายรุ้ง','ก้อนเมฆ'];
+
+/* ---------- parts ---------- */
+function emblem(k,c,x,y,s){
+  const g=(d)=>`<g transform="translate(${x} ${y}) scale(${s})">${d}</g>`;
+  switch(k){
+    case 0:return g(`<path d="M0 -14 L4 -4 L15 -4 L6 3 L9 14 L0 7 L-9 14 L-6 3 L-15 -4 L-4 -4Z" fill="${c}" ${ST}/>`);
+    case 1:return g(`<path d="M0 12 C-18 0 -14 -14 -6 -14 C-2 -14 0 -10 0 -8 C0 -10 2 -14 6 -14 C14 -14 18 0 0 12Z" fill="${c}" ${ST}/>`);
+    case 2:return g(`<path d="M-10 10 C-14 -6 0 -16 12 -12 C14 2 4 14 -10 10Z" fill="${c}" ${ST}/><path d="M-10 10 L6 -6" ${ST} fill="none"/>`);
+    case 3:return g(`<path d="M4 -13 A13 13 0 1 0 12 8 A10 10 0 1 1 4 -13Z" fill="${c}" ${ST}/>`);
+    case 4:return g(`<ellipse cx="0" cy="5" rx="8" ry="6" fill="${c}" ${ST}/><circle cx="-9" cy="-5" r="3.6" fill="${c}" ${ST}/><circle cx="-3" cy="-10" r="3.6" fill="${c}" ${ST}/><circle cx="4" cy="-10" r="3.6" fill="${c}" ${ST}/><circle cx="10" cy="-5" r="3.6" fill="${c}" ${ST}/>`);
+    case 5:return g([0,72,144,216,288].map(a=>`<ellipse cx="0" cy="-8" rx="5" ry="8" transform="rotate(${a})" fill="${c}" ${ST}/>`).join('')+`<circle r="5" fill="#fff6c2" ${ST}/>`);
+    case 6:return g(`<path d="M-14 6 A14 14 0 0 1 14 6" fill="none" stroke="#e8453c" stroke-width="5"/><path d="M-10 6 A10 10 0 0 1 10 6" fill="none" stroke="#f2b632" stroke-width="5"/><path d="M-6 6 A6 6 0 0 1 6 6" fill="none" stroke="#2f6fd6" stroke-width="5"/>`);
+    case 7:return g(`<path d="M-14 6 Q-16 -4 -6 -4 Q-4 -12 4 -10 Q12 -12 12 -2 Q18 0 14 6Z" fill="${c}" ${ST}/>`);
+  }
+}
+function eyesSvg(k,x1,x2,y){
+  const e=x=>{switch(k){
+    case 0:return `<circle cx="${x}" cy="${y}" r="7" fill="${INK}"/><circle cx="${x+2.5}" cy="${y-2.5}" r="2.5" fill="#fff"/>`;
+    case 1:return `<path d="M${x-8} ${y+2} Q${x} ${y-8} ${x+8} ${y+2}" fill="none" ${ST} stroke-width="4"/>`;
+    case 2:return `<ellipse cx="${x}" cy="${y}" rx="9" ry="10" fill="#fff" ${ST}/><circle cx="${x}" cy="${y+1}" r="6" fill="#3a6fc4"/><circle cx="${x}" cy="${y+1}" r="3" fill="${INK}"/><circle cx="${x+3}" cy="${y-3}" r="2.5" fill="#fff"/>`;
+    case 3:return `<circle cx="${x}" cy="${y}" r="6" fill="${INK}"/><path d="M${x-9} ${y-11} L${x+8} ${y-7}" ${ST} stroke-width="4" transform="${x<150?'':`scale(-1 1) translate(${-2*x} 0)`}"/>`;
+    case 4:return `<path d="M${x-8} ${y} Q${x} ${y+6} ${x+8} ${y}" fill="none" ${ST} stroke-width="4"/>`;
+  }};return e(x1)+e(x2);
+}
+function noseSvg(k,y){return [`<circle cx="150" cy="${y}" r="3.5" fill="#d98f6a"/>`,`<ellipse cx="150" cy="${y}" rx="7" ry="5.5" fill="#f08a7a" ${ST} stroke-width="2"/>`,`<path d="M150 ${y-7} L156 ${y+4} L144 ${y+4}Z" fill="#e9a07c" ${ST} stroke-width="2"/>`,`<path d="M146 ${y} q4 4 8 0" fill="none" ${ST} stroke-width="2.5"/>`][k]}
+function mouthSvg(k,y){return [
+  `<path d="M136 ${y} Q150 ${y+14} 164 ${y}" fill="none" ${ST} stroke-width="4"/>`,
+  `<path d="M132 ${y-2} Q150 ${y+24} 168 ${y-2}Z" fill="#a8423c" ${ST}/><path d="M140 ${y+9} Q150 ${y+16} 160 ${y+9}" fill="#ff8fa3"/>`,
+  `<ellipse cx="150" cy="${y+4}" rx="7" ry="9" fill="#a8423c" ${ST}/>`,
+  `<path d="M136 ${y} Q150 ${y+12} 164 ${y}" fill="none" ${ST} stroke-width="4"/><path d="M146 ${y+6} q4 10 8 0z" fill="#ff8fa3" ${ST} stroke-width="2"/>`,
+  `<path d="M138 ${y+4} L162 ${y+2}" ${ST} stroke-width="4"/>`][k]}
+function hairSvg(k,c,back){
+  if(back){return k===3?`<path d="M96 108 Q90 200 112 214 L188 214 Q210 200 204 108Z" fill="${c}" ${ST}/>`:''}
+  switch(k){
+    case 0:return `<path d="M98 112 L104 76 L118 92 L126 64 L140 86 L152 60 L162 86 L176 66 L184 92 L198 78 L202 112 Q150 84 98 112Z" fill="${c}" ${ST}/>`;
+    case 1:return [ [108,92],[124,76],[144,70],[164,72],[182,82],[196,98],[104,110],[198,112] ].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="15" fill="${c}" ${ST}/>`).join('');
+    case 2:return `<path d="M98 116 Q100 66 150 66 Q200 66 202 116 Q176 94 150 98 Q124 94 98 116Z" fill="${c}" ${ST}/><circle cx="150" cy="54" r="16" fill="${c}" ${ST}/>`;
+    case 3:return `<path d="M98 120 Q98 66 150 66 Q202 66 202 120 Q190 96 160 92 Q130 96 98 120Z" fill="${c}" ${ST}/>`;
+    case 4:return '';
+    case 5:return `<path d="M100 110 Q120 70 150 68 Q190 70 200 104 Q170 80 150 96 Q140 74 100 110Z" fill="${c}" ${ST}/><path d="M150 68 Q160 40 182 44 Q168 54 162 72" fill="${c}" ${ST}/>`;
+  }
+}
+function maskSvg(k,c){
+  switch(k){
+    case 0:return '';
+    case 1:return `<path d="M100 120 Q112 104 136 110 Q150 116 164 110 Q188 104 200 120 Q196 140 172 140 Q156 140 150 132 Q144 140 128 140 Q104 140 100 120Z" fill="${c}" ${ST}/><ellipse cx="128" cy="124" rx="12" ry="9" fill="#fff"/><ellipse cx="172" cy="124" rx="12" ry="9" fill="#fff"/>`;
+    case 2:return `<path d="M96 122 H204" stroke="${c}" stroke-width="10"/><circle cx="128" cy="124" r="17" fill="#cdeefb" fill-opacity=".55" stroke="${c}" stroke-width="7"/><circle cx="172" cy="124" r="17" fill="#cdeefb" fill-opacity=".55" stroke="${c}" stroke-width="7"/><path d="M120 116 l8 -4" stroke="#fff" stroke-width="3" stroke-linecap="round"/>`;
+    case 3:return `<path d="M94 128 Q94 58 150 58 Q206 58 206 128 L206 134 Q150 110 94 134Z" fill="${c}" ${ST}/><path d="M104 112 Q150 96 196 112 L196 132 Q150 118 104 132Z" fill="#9fdcff" fill-opacity=".75" ${ST} stroke-width="2.5"/>`;
+    case 4:return `<path d="M98 102 Q150 76 202 102 L202 112 Q150 92 98 112Z" fill="${c}" ${ST}/><path d="M200 104 q16 4 22 18 q-14 -4 -22 -8z" fill="${c}" ${ST}/>`;
+  }
+}
+function capeSvg(k,c){
+  if(!k)return '';
+  const long=k===2;
+  return `<path d="M108 184 Q72 ${long?300:250} ${long?62:84} ${long?392:310} Q150 ${long?372:292} ${long?238:216} ${long?392:310} Q228 ${long?300:250} 192 184Z" fill="${c}" ${ST}/>`;
+}
+function bootSvg(k,c){
+  const one=(x,f)=>[
+    `<path d="M${x-16} 340 h32 v34 q0 8 ${f*8} 10 h${f*10} v10 h${-f*0}" fill="none"/><path d="M${x-16} 338 h32 v40 h${f*12} q4 0 4 6 v6 h-52 v-10z" fill="${c}" ${ST}/>`,
+    `<path d="M${x-17} 330 h34 v4 h-34z M${x-16} 334 h32 v44 h${f*12} q4 0 4 6 v6 h-52 v-10z" fill="${c}" ${ST}/><path d="M${x-18} 330 h36 l-4 10 h-28z" fill="#ffd166" ${ST}/>`,
+    `<path d="M${x-16} 356 h32 v22 h${f*12} q4 0 4 6 v6 h-52 v-10z" fill="${c}" ${ST}/><path d="M${x-12} 370 h24" stroke="#fff" stroke-width="3"/>`][k];
+  return one(130,-1)+one(170,1);
+}
+function render(){
+  const skin=SKIN[S.skin],suit=SUIT[S.suit],suit2=SUIT[S.suit2];
+  let g='';
+  g+=capeSvg(S.cape,SUIT[S.capeC]);
+  g+=hairSvg(S.hair,HAIRC[S.hairC],true);
+  // legs
+  g+=`<path d="M118 280 L116 352 L144 352 L148 300 L152 300 L156 352 L184 352 L182 280Z" fill="${suit}" ${ST}/>`;
+  g+=bootSvg(S.boots,SUIT[S.bootC]);
+  // arms
+  g+=`<path d="M112 196 Q88 230 92 268" fill="none" stroke="${INK}" stroke-width="27" stroke-linecap="round"/><path d="M112 196 Q88 230 92 268" fill="none" stroke="${suit}" stroke-width="21" stroke-linecap="round"/>`;
+  g+=`<path d="M188 196 Q212 230 208 268" fill="none" stroke="${INK}" stroke-width="27" stroke-linecap="round"/><path d="M188 196 Q212 230 208 268" fill="none" stroke="${suit}" stroke-width="21" stroke-linecap="round"/>`;
+  g+=`<circle cx="92" cy="272" r="14" fill="${suit2}" ${ST}/><circle cx="208" cy="272" r="14" fill="${suit2}" ${ST}/>`;
+  // torso
+  g+=`<path d="M108 186 Q150 172 192 186 L186 284 Q150 292 114 284Z" fill="${suit}" ${ST}/>`;
+  if(S.pat===1)g+=`<path d="M112 200 L118 280 M188 200 L182 280" stroke="${suit2}" stroke-width="10"/>`;
+  if(S.pat===2)g+=`<path d="M110 214 Q150 236 190 214 L189 230 Q150 252 111 230Z" fill="${suit2}"/>`;
+  if(S.pat===3)g+=[[124,264],[176,262],[150,276],[118,206],[182,206]].map(([x,y])=>emblem(0,suit2,x,y,.35)).join('');
+  g+=`<path d="M114 270 Q150 280 186 270 L186 284 Q150 294 114 284Z" fill="${suit2}" ${ST}/><rect x="140" y="270" width="20" height="16" rx="4" fill="#ffd166" ${ST} stroke-width="2.5"/>`;
+  g+=`<circle cx="150" cy="226" r="24" fill="#fff" ${ST}/>`+emblem(S.emb,SUIT[S.embC],150,226,1.25);
+  // neck + head
+  g+=`<rect x="138" y="168" width="24" height="20" fill="${skin}" ${ST}/>`;
+  g+=`<circle cx="100" cy="128" r="12" fill="${skin}" ${ST}/><circle cx="200" cy="128" r="12" fill="${skin}" ${ST}/>`;
+  g+=`<ellipse cx="150" cy="122" rx="52" ry="54" fill="${skin}" ${ST}/>`;
+  g+=`<ellipse cx="120" cy="146" rx="9" ry="5" fill="#ff8fa3" opacity=".5"/><ellipse cx="180" cy="146" rx="9" ry="5" fill="#ff8fa3" opacity=".5"/>`;
+  g+=hairSvg(S.hair,HAIRC[S.hairC],false);
+  g+=eyesSvg(S.eyes,128,172,124);
+  g+=noseSvg(S.nose,142);
+  g+=mouthSvg(S.mouth,154);
+  g+=maskSvg(S.mask,SUIT[S.maskC]);
+  if(S.mask===1||S.mask===2) g+=eyesSvg(S.eyes,128,172,124);
+  $('heroSvg').innerHTML=`<ellipse cx="150" cy="398" rx="78" ry="10" fill="#000" opacity=".1"/><g class="hero" id="heroG">${g}</g>`;
+  $('heroName').textContent='ฮีโร่'+NAMES[S.emb];
+}
+
+/* ---------- options ---------- */
+const mini=(inner,vb='60 40 180 160')=>`<svg viewBox="${vb}" aria-hidden="true">${inner}</svg>`;
+const face=()=>`<ellipse cx="150" cy="122" rx="52" ry="54" fill="${SKIN[S.skin]}" ${ST}/>`;
+const TABS=[
+ {i:'🙂',t:'สีผิว',key:'skin',colors:SKIN},
+ {i:'👀',t:'ตา',key:'eyes',n:5,draw:k=>mini(face()+eyesSvg(k,128,172,124),'80 70 140 110')},
+ {i:'👃',t:'จมูก',key:'nose',n:4,draw:k=>mini(face()+noseSvg(k,142),'100 100 100 80')},
+ {i:'👄',t:'ปาก',key:'mouth',n:5,draw:k=>mini(face()+mouthSvg(k,154),'100 120 100 80')},
+ {i:'💇',t:'ผม',key:'hair',n:6,draw:k=>mini(hairSvg(k,HAIRC[S.hairC],true)+face()+hairSvg(k,HAIRC[S.hairC],false),'80 30 140 190'),colorsKey:'hairC',colors:HAIRC},
+ {i:'🎭',t:'หน้ากาก',key:'mask',n:5,draw:k=>mini(face()+(k?maskSvg(k,SUIT[S.maskC]):'<text x="150" y="140" font-size="40" text-anchor="middle">🚫</text>'),'80 50 140 140'),colorsKey:'maskC',colors:SUIT},
+ {i:'🦸',t:'ชุด',key:'pat',n:4,draw:k=>{const o=S.pat;S.pat=k;const r=mini(`<path d="M108 186 Q150 172 192 186 L186 284 Q150 292 114 284Z" fill="${SUIT[S.suit]}" ${ST}/>`+(k===1?`<path d="M112 200 L118 280 M188 200 L182 280" stroke="${SUIT[S.suit2]}" stroke-width="10"/>`:'')+(k===2?`<path d="M110 214 Q150 236 190 214 L189 230 Q150 252 111 230Z" fill="${SUIT[S.suit2]}"/>`:'')+(k===3?[[124,264],[176,262],[118,206],[182,206]].map(([x,y])=>emblem(0,SUIT[S.suit2],x,y,.35)).join(''):''),'96 166 108 132');S.pat=o;return r},colorsKey:'suit',colors:SUIT,colors2Key:'suit2'},
+ {i:'⭐',t:'สัญลักษณ์',key:'emb',n:8,draw:k=>mini(`<circle cx="0" cy="0" r="24" fill="#fff" ${ST}/>`+emblem(k,SUIT[S.embC],0,0,1.25),'-30 -30 60 60'),colorsKey:'embC',colors:SUIT},
+ {i:'🧣',t:'ผ้าคลุม',key:'cape',n:3,draw:k=>mini(k?capeSvg(k,SUIT[S.capeC]):'<text x="150" y="250" font-size="60" text-anchor="middle">🚫</text>','50 170 200 230'),colorsKey:'capeC',colors:SUIT},
+ {i:'🥾',t:'รองเท้า',key:'boots',n:3,draw:k=>mini(bootSvg(k,SUIT[S.bootC]),'100 320 100 80'),colorsKey:'bootC',colors:SUIT},
+];
+let tab=0;
+function renderTabs(){$('tabs').innerHTML=TABS.map((t,i)=>`<button class="tab" role="tab" type="button" data-i="${i}" aria-selected="${i===tab}"><span class="i">${t.i}</span>${t.t}</button>`).join('')}
+function renderPanel(){
+  const t=TABS[tab];let h='';
+  if(t.n){h+=`<div class="opts">${[...Array(t.n)].map((_,k)=>`<button class="opt" type="button" data-k="${k}" aria-pressed="${S[t.key]===k}" aria-label="แบบที่ ${k+1}">${t.draw(k)}</button>`).join('')}</div>`}
+  const ck=t.n?t.colorsKey:t.key;
+  if(ck){h+=`<div class="sub">${t.n?'🎨 สี':''}</div><div class="opts">${t.colors.map((c,k)=>`<button class="sw" type="button" data-c="${k}" data-key="${ck}" style="background:${c}" aria-pressed="${S[ck]===k}" aria-label="สีที่ ${k+1}"></button>`).join('')}</div>`}
+  if(t.colors2Key){h+=`<div class="sub">🎨 สีที่สอง</div><div class="opts">${t.colors.map((c,k)=>`<button class="sw" type="button" data-c="${k}" data-key="${t.colors2Key}" style="background:${c}" aria-pressed="${S[t.colors2Key]===k}" aria-label="สีที่สองแบบที่ ${k+1}"></button>`).join('')}</div>`}
+  $('panel').innerHTML=h;
+}
+$('tabs').onclick=e=>{const b=e.target.closest('.tab');if(!b)return;tab=+b.dataset.i;renderTabs();renderPanel();say(TABS[tab].t);pop()};
+$('panel').onclick=e=>{
+  const o=e.target.closest('.opt'),w=e.target.closest('.sw');
+  if(o){S[TABS[tab].key]=+o.dataset.k}else if(w){S[w.dataset.key]=+w.dataset.c}else return;
+  render();renderPanel();pop();
+  if(TABS[tab].key==='emb'&&o)say('ฮีโร่'+NAMES[S.emb]);
+};
+$('rnd').onclick=()=>{for(const t of TABS){if(t.n)S[t.key]=Math.floor(Math.random()*t.n);const ck=t.n?t.colorsKey:t.key;if(ck)S[ck]=Math.floor(Math.random()*t.colors.length);if(t.colors2Key)S[t.colors2Key]=Math.floor(Math.random()*t.colors.length)}
+  render();renderPanel();tone([392,523,659],.2);say('ว้าว ฮีโร่'+NAMES[S.emb]+' มาแล้ว')};
+$('flyBtn').onclick=()=>{const g=$('heroG');g.classList.remove('fly');void g.getBBox();g.classList.add('fly');tone([330,440,660,880],.18,'triangle');say('ฮีโร่'+NAMES[S.emb]+' บินได้แล้ว ฟิ้ว')};
+$('sayName').onclick=()=>say('นี่คือ ฮีโร่'+NAMES[S.emb]+' ค่ะ');
+
+/* ---------- sound & voice ---------- */
+let ac;function tone(fs,d,type){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();fs.forEach((f,i)=>{const o=ac.createOscillator(),g=ac.createGain(),t=ac.currentTime+i*.08;o.type=type||'sine';o.frequency.value=f;g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.12,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g).connect(ac.destination);o.start(t);o.stop(t+d+.05)})}catch(e){}}
+const pop=()=>tone([660],.12,'triangle');
+let utt;function say(t){try{const s=speechSynthesis;s.cancel();utt=new SpeechSynthesisUtterance(t);const v=s.getVoices().filter(v=>/^th/i.test(v.lang)).sort((a,b)=>(/kanya|premwadee|female|google/i.test(b.name)?1:0)-(/kanya|premwadee|female|google/i.test(a.name)?1:0))[0];if(v)utt.voice=v;utt.lang='th-TH';utt.rate=.85;utt.pitch=1.12;s.speak(utt)}catch(e){}}
+
+render();renderTabs();renderPanel();
+</script>
+</body></html>

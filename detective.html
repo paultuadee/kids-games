@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>นักสืบตัวจิ๋ว</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mali:wght@600;700&display=swap">
+<style>
+/* Layout: a soft watercolor picture-book for pre-readers — huge rounded buttons, pictures instead of words, every screen talks */
+:root{
+  --cream:#fff7ee; --blob1:#ffe3d2; --blob2:#dff3e8; --blob3:#e9e0fb; --blob4:#d9ecfb;
+  --ink:#5b4636; --soft:#9a8574; --card:#ffffff; --edge:#f1e2d2;
+  --berry:#f2768c; --berry-d:#d95a72; --sun:#ffd166; --mint:#7fd3a8; --mint-d:#4fb784; --lav:#b79ce8; --lav-d:#8f6fd0; --sky:#7cc0ef;
+  --font:'Mali','Sarabun','Noto Sans Thai',system-ui,sans-serif;
+  --shadow:0 6px 0 rgba(91,70,54,.13);
+  color-scheme:light;
+}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0;overflow:hidden;font-family:var(--font);color:var(--ink);font-weight:600;
+  background:
+    radial-gradient(40vmax 30vmax at 0% 0%,var(--blob1),transparent 70%),
+    radial-gradient(35vmax 30vmax at 100% 10%,var(--blob4),transparent 70%),
+    radial-gradient(45vmax 35vmax at 100% 100%,var(--blob2),transparent 70%),
+    radial-gradient(35vmax 30vmax at 0% 90%,var(--blob3),transparent 70%),
+    var(--cream);
+  -webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+button,select{font-family:inherit;color:inherit;font-weight:700}
+button{cursor:pointer;border:0}
+button:focus-visible,select:focus-visible,summary:focus-visible{outline:4px solid var(--sky);outline-offset:3px}
+.screen{height:100%;overflow-y:auto;padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));box-sizing:border-box}
+.wrap{max-width:540px;margin:0 auto;padding-block:14px 36px;display:flex;flex-direction:column;gap:16px}
+.press{transition:transform .12s}
+.press:active{transform:scale(.95)}
+
+/* ---------- home ---------- */
+.hero{position:relative;background:var(--card);border-radius:32px;box-shadow:var(--shadow);overflow:hidden;border:4px solid #fff}
+.hero img{display:block;width:100%;aspect-ratio:16/8.5;object-fit:cover;object-position:center 35%}
+.hero .title{position:absolute;left:0;right:0;bottom:0;padding:26px 16px 12px;background:linear-gradient(transparent,rgba(255,255,255,.95) 45%);display:flex;align-items:flex-end;justify-content:space-between;gap:8px}
+.hero h1{margin:0;font-size:clamp(32px,10vw,46px);line-height:1;color:var(--berry);text-shadow:3px 3px 0 #fff, 4px 4px 0 var(--sun)}
+.starpill{background:var(--sun);border-radius:999px;padding:6px 14px;font-size:20px;box-shadow:0 3px 0 rgba(91,70,54,.18);white-space:nowrap;font-variant-numeric:tabular-nums}
+.levels{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.lvl{border-radius:28px;padding:12px 8px 14px;display:flex;flex-direction:column;align-items:center;gap:4px;box-shadow:var(--shadow);border:4px solid transparent;position:relative}
+.lvl .ic{font-size:44px;line-height:1.1}
+.lvl .t{font-size:20px;line-height:1.1}
+.lvl .s{font-size:13px;color:var(--soft)}
+.lvl.l1{background:#e7f7ef}
+.lvl.l2{background:#f0e9fd}
+.lvl[aria-pressed="true"].l1{border-color:var(--mint-d)}
+.lvl[aria-pressed="true"].l2{border-color:var(--lav-d)}
+.lvl[aria-pressed="true"]::after{content:"✓";position:absolute;right:10px;top:8px;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:16px}
+.lvl.l1[aria-pressed="true"]::after{background:var(--mint-d)}
+.lvl.l2[aria-pressed="true"]::after{background:var(--lav-d)}
+.play{background:var(--berry);color:#fff;border-radius:999px;font-size:clamp(28px,9vw,38px);padding:16px 10px;box-shadow:0 8px 0 var(--berry-d);display:flex;align-items:center;justify-content:center;gap:12px;animation:bob 2s ease-in-out infinite}
+.play:active{transform:translateY(5px);box-shadow:0 3px 0 var(--berry-d)}
+.play .tri{display:inline-grid;place-items:center;width:52px;height:52px;border-radius:50%;background:#fff;color:var(--berry);font-size:26px;padding-left:4px;box-sizing:border-box}
+@keyframes bob{50%{transform:translateY(-3px)}}
+.book{display:flex;flex-direction:column;gap:10px}
+.book h2{margin:0;font-size:18px;display:flex;align-items:center;gap:8px;color:var(--soft)}
+.book h2 b{background:#fff;color:var(--ink);border-radius:999px;padding:3px 12px;box-shadow:0 3px 0 rgba(91,70,54,.1)}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.tile{position:relative;background:#fff;border-radius:22px;padding:5px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:3px}
+.tile img{display:block;width:100%;aspect-ratio:1;object-fit:cover;border-radius:17px}
+.tile .num{position:absolute;left:-4px;top:-6px;width:34px;height:34px;border-radius:50%;background:var(--sun);display:grid;place-items:center;font-size:17px;box-shadow:0 2px 0 rgba(91,70,54,.2);font-variant-numeric:tabular-nums}
+.tile .st{text-align:center;font-size:16px;letter-spacing:2px;color:var(--sun);line-height:1.1;-webkit-text-stroke:.5px #e0a92f}
+.tile .st .off{color:#efe6dc;-webkit-text-stroke:0}
+.tile.locked img{filter:grayscale(1) blur(2px);opacity:.45}
+.tile.locked::after{content:"🔒";position:absolute;inset:5px 5px auto 5px;aspect-ratio:1;display:grid;place-items:center;font-size:34px}
+.tile.now{box-shadow:0 0 0 5px var(--berry),var(--shadow);animation:bob 1.6s ease-in-out infinite}
+.tile.soon{background:rgba(255,255,255,.5);box-shadow:none;border:3px dashed var(--edge)}
+.tile.soon .ph{aspect-ratio:1;display:grid;place-items:center;font-size:30px;opacity:.5}
+.prog{background:#fff;border-radius:24px;padding:12px 16px 14px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:8px}
+.prog .pt{font-size:18px;text-align:center}
+.pbar{height:16px;border-radius:999px;background:#f3e9de;overflow:hidden}
+.pbar span{display:block;height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,var(--mint),var(--sky));transition:width .4s}
+.hub{align-self:flex-start;background:#fff;border-radius:999px;padding:8px 16px;font-size:16px;color:var(--ink);text-decoration:none;box-shadow:var(--shadow)}
+.trophy{background:var(--sun);border-radius:24px;padding:14px;font-size:20px;text-align:center;box-shadow:var(--shadow)}
+.parent{background:rgba(255,255,255,.7);border-radius:20px;padding:10px 14px;font-size:14px;color:var(--soft)}
+.parent summary{cursor:pointer;font-weight:700}
+.parent .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}
+.parent select{flex:1;min-width:0;font-size:15px;padding:8px;border:2px solid var(--edge);border-radius:12px;background:#fff;color:var(--ink)}
+.parent p{margin:8px 0 0}
+.chip{background:#fff;border-radius:999px;padding:8px 14px;box-shadow:0 3px 0 rgba(91,70,54,.12);font-size:15px}
+
+/* ---------- case ---------- */
+.top{display:flex;align-items:center;gap:10px}
+.round{width:54px;height:54px;border-radius:50%;background:#fff;box-shadow:var(--shadow);font-size:26px;display:grid;place-items:center;flex:none}
+.round.hint{background:var(--sun)}
+.top .where{flex:1;min-width:0;text-align:center;font-size:20px}
+.top .where small{display:block;font-size:13px;color:var(--soft)}
+.lv2tag{display:inline-block;background:var(--lav);color:#fff;border-radius:999px;font-size:12px;padding:1px 9px;vertical-align:middle;margin-left:4px}
+.bubble{display:flex;gap:12px;align-items:center;background:#fff;border-radius:26px;padding:10px 14px 10px 10px;box-shadow:var(--shadow);position:relative}
+.bubble::after{content:"";position:absolute;left:34px;bottom:-12px;border:12px solid transparent;border-top-color:#fff;border-bottom:0}
+.spk{width:60px;height:60px;border-radius:50%;background:var(--berry);color:#fff;font-size:28px;display:grid;place-items:center;flex:none;box-shadow:0 4px 0 var(--berry-d)}
+.spk.on{animation:pulse 1s ease-in-out infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 10px rgba(242,118,140,.25),0 4px 0 var(--berry-d)}}
+.bubble p{margin:0;font-size:clamp(19px,5.6vw,24px);line-height:1.35;text-wrap:balance}
+.scene{position:relative;border-radius:28px;overflow:hidden;box-shadow:var(--shadow);border:4px solid #fff;line-height:0;cursor:zoom-in;background:#f4ead8}
+.scene img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover}
+.zoomtip{position:absolute;right:10px;bottom:10px;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.92);display:grid;place-items:center;font-size:22px;line-height:1;pointer-events:none}
+.ringx{position:absolute;border:6px solid #ffc400;border-radius:50%;opacity:0;pointer-events:none;transform:translate(-50%,-50%);box-shadow:0 0 0 3px rgba(255,255,255,.8),0 0 20px #ffc400}
+.ringx.on{animation:ring .9s ease-in-out 4}
+@keyframes ring{50%{opacity:1}}
+.pick{display:flex;align-items:center;justify-content:center;gap:8px;font-size:18px;color:var(--soft);margin-bottom:-6px}
+.pick b{color:var(--ink)}
+.lineup{position:relative;background:#fff;border-radius:28px;box-shadow:var(--shadow);overflow:hidden;line-height:0;border:4px solid #fff}
+.lineup>img{display:block;width:100%;height:auto}
+.hits{position:absolute;inset:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+.sus{background:none;padding:0;border-radius:18px;margin:4px 2px}
+.sus.yes{background:rgba(127,211,168,.22);box-shadow:inset 0 0 0 5px var(--mint-d)}
+.sus.no{background:rgba(242,118,140,.15);animation:wob .4s}
+.names{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));text-align:center;font-size:16px;line-height:1.4;padding:0 0 10px}
+.why{margin:0;background:#e9f8f0;border-radius:22px;padding:12px 14px;font-size:18px;color:#2f7d58;text-align:center;box-shadow:var(--shadow)}
+.l2{background:#f3edff;border-radius:28px;padding:14px;display:flex;flex-direction:column;gap:12px;box-shadow:var(--shadow)}
+.l2 .bubble{background:#fff}
+.opts{display:flex;flex-direction:column;gap:10px}
+.optrow{display:flex;gap:8px;align-items:stretch}
+.opt{flex:1;min-width:0;background:#fff;border-radius:22px;font-size:clamp(17px,5vw,20px);padding:12px 14px;text-align:left;box-shadow:0 5px 0 rgba(143,111,208,.35);line-height:1.35;display:flex;align-items:center;gap:10px}
+.opt .em{font-size:34px;line-height:1;flex:none}
+.opt:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(143,111,208,.35)}
+.opt.no{background:#ffe6ea;animation:wob .4s}
+.opt.yes{background:#dff5e9;box-shadow:0 5px 0 var(--mint-d)}
+.mini{width:48px;border-radius:18px;background:#fff;box-shadow:0 5px 0 rgba(143,111,208,.35);font-size:20px;flex:none}
+
+/* ---------- overlays ---------- */
+.zoom{position:fixed;inset:0;z-index:25;background:#2c2420;display:flex;flex-direction:column}
+.zoom .zs{flex:1;overflow:auto;-webkit-overflow-scrolling:touch}
+.zoom .zs img{display:block;width:max(200vw,900px);height:auto}
+.zoom .zb{display:flex;justify-content:flex-end;padding:10px max(14px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(14px,env(safe-area-inset-left,0px))}
+.win{position:fixed;inset:0;background:rgba(91,70,54,.45);display:grid;place-items:center;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));z-index:20}
+.win .card{background:#fff;border-radius:34px;box-shadow:0 10px 0 rgba(91,70,54,.2);padding:22px 18px 18px;width:min(100%,370px);text-align:center;display:flex;flex-direction:column;gap:10px;box-sizing:border-box;animation:pop .45s;border:5px solid var(--sun)}
+.win .face{font-size:64px;line-height:1}
+.win h3{margin:0;font-size:30px;color:var(--berry)}
+.win .stars{font-size:46px;letter-spacing:6px;color:#f0e7dc}
+.win .stars .on{color:var(--sun)}
+.win .msg{font-size:18px;line-height:1.4}
+.win .row{display:flex;gap:10px;justify-content:center}
+.win .next{flex:1;background:var(--mint-d);color:#fff;border-radius:999px;font-size:26px;padding:12px;box-shadow:0 6px 0 #3a9a6b}
+.win .home{width:60px;height:60px;border-radius:50%;background:var(--cream);font-size:28px;flex:none;box-shadow:0 4px 0 rgba(91,70,54,.15)}
+.win .bar2{height:8px;border-radius:999px;background:#f0e7dc;overflow:hidden}
+.win .bar2 span{display:block;height:100%;width:0;background:var(--mint)}
+.win.go .bar2 span{width:100%;transition:width 6s linear}
+.conf{position:fixed;top:-40px;font-size:28px;pointer-events:none;z-index:30;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg)}}
+@keyframes pop{0%{transform:scale(.6)}60%{transform:scale(1.08)}100%{transform:scale(1)}}
+@keyframes wob{0%,100%{rotate:0deg}25%{rotate:-5deg}75%{rotate:5deg}}
+.novoice{background:#fff3c4;border-radius:18px;padding:10px 14px;font-size:14px;line-height:1.4}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head><body>
+
+
+<section class="screen" id="home">
+  <div class="wrap">
+    <a class="hub" href="index.html" aria-label="กลับไปหน้ารวมเกม">‹ เกมทั้งหมด</a>
+    <div class="hero">
+      <img src="img/c01-friends.jpg" alt="แก๊งนักสืบตัวจิ๋ว">
+      <div class="title"><h1>นักสืบตัวจิ๋ว</h1><span class="starpill" id="starsTotal">⭐ 0</span></div>
+    </div>
+    <div class="levels" role="group" aria-label="เลือกระดับ">
+      <button class="lvl l1 press" id="m1" type="button" aria-pressed="true"><span class="ic">🔎</span><span class="t">หาคนซน</span><span class="s">ระดับ 1</span></button>
+      <button class="lvl l2 press" id="m2" type="button" aria-pressed="false"><span class="ic">💜</span><span class="t">เด็กดี</span><span class="s">ระดับ 2</span></button>
+    </div>
+    <button class="play" id="startBtn" type="button"><span class="tri">▶</span><span id="startTxt">เล่นเลย</span></button>
+    <div class="prog" id="prog"><div class="pt" id="progTxt"></div><div class="pbar"><span id="progBar"></span></div></div>
+    <div class="trophy" id="trophy" hidden>🏆 ไขครบทุกคดีแล้ว! เก่งที่สุดเลย</div>
+    <div class="novoice" id="novoice" hidden>สำหรับผู้ปกครอง: เครื่องนี้ยังไม่มีเสียงอ่านภาษาไทย จึงอาจไม่ได้ยินเสียงโจทย์ ติดตั้งได้ที่ การตั้งค่า › การช่วยการเข้าถึง › เนื้อหาที่พูด › เสียง › ไทย (iPhone) หรือ การตั้งค่า › ภาษา › ข้อความเป็นเสียงพูด (Android/Windows)</div>
+    <details class="parent">
+      <summary>⚙️ สำหรับผู้ปกครอง</summary>
+      <div class="row">
+        <select id="voiceSel" aria-label="เลือกเสียงอ่าน"></select>
+        <button class="chip press" id="testVoice" type="button">🔊 ลองฟัง</button>
+      </div>
+      <p id="diag" style="color:#b0563f"></p>
+      <p id="voiceNote">ระบบเลือกเสียงผู้หญิงภาษาไทยให้อัตโนมัติ ถ้ามีหลายเสียงเลือกเสียงที่ชอบได้</p>
+      <p>ระดับ 2 จะเปิดทีละข้อ ตามข้อที่ผ่านในระดับ 1 แล้ว</p>
+      <div class="row"><button class="chip press" id="restart" type="button">↻ เริ่มเล่นใหม่ตั้งแต่ข้อ 1</button></div>
+    </details>
+  </div>
+</section>
+
+<section class="screen" id="caseScreen" hidden>
+  <div class="wrap">
+    <div class="top">
+      <button class="round press" id="back" type="button" aria-label="กลับหน้าแรก">🏠</button>
+      <span class="where" id="where"></span>
+      <button class="round hint press" id="hintBtn" type="button" aria-label="ขอคำใบ้">💡</button>
+    </div>
+    <div class="bubble"><button class="spk press" id="sayBtn" type="button" aria-label="ฟังโจทย์อีกครั้ง">🔊</button><p id="q"></p></div>
+    <div class="scene" id="scene"></div>
+    <div class="pick">👇 <b>แตะเลือก</b> ใครทำนะ?</div>
+    <div class="lineup" id="lineup"></div>
+    <p class="why" id="why" hidden></p>
+    <div class="l2" id="l2" hidden>
+      <div class="bubble"><button class="spk press" id="say2" type="button" aria-label="ฟังคำถามอีกครั้ง">🔊</button><p id="l2q"></p></div>
+      <div class="opts" id="opts"></div>
+    </div>
+  </div>
+</section>
+
+<div class="zoom" id="zoom" hidden><div class="zs" id="zs"></div><div class="zb"><button class="round press" id="zclose" type="button" aria-label="ปิดภาพขยาย">✕</button></div></div>
+
+<div class="win" id="win" hidden>
+  <div class="card">
+    <div class="face">🥳</div>
+    <h3 id="winTitle">เก่งมาก!</h3>
+    <div class="stars" id="winStars"></div>
+    <div class="msg" id="winWhy"></div>
+    <div class="bar2" id="winBar"><span></span></div>
+    <div class="row">
+      <button class="home press" id="toHome" type="button" aria-label="กลับหน้าแรก">🏠</button>
+      <button class="next press" id="nextBtn" type="button">ไปต่อ ▶</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const CASES=[{"title": "ห้องน้ำเลอะ", "q": "ในห้องน้ำ ใครกำลังซนอยู่นะ?", "say": "ในห้องน้ำ ใครกำลังเล่นน้ำจนเลอะไปหมด ดูภาพข้างบน แล้วหาเพื่อนที่ซนให้เจอนะคะ", "hint": "ดูที่พื้นสิคะ มีรอยเท้าสีส้มแบบมีพังผืด กับฟองสบู่เต็มเลย ใครเท้าเป็นแบบนั้นและตัวเปียก", "ans": 1, "why": "น้องเป็ดตัวเปียก มีฟองสบู่ และรอยเท้าเป็ดเหมือนบนพื้น", "l2": {"q": "แล้วน้องเป็ดควรทำอย่างไรดี?", "good": "🧽 ช่วยเช็ดพื้นให้แห้ง แล้วบอกผู้ใหญ่", "bad": ["🏃 วิ่งหนีไปเล่นต่อ", "🙈 ทำเป็นไม่รู้ไม่เห็น"], "lesson": "เล่นน้ำเลอะแล้ว ต้องช่วยกันเก็บ พื้นเปียกทำให้ลื่นล้มได้นะคะ"}, "sus": [{"n": "แมว"}, {"n": "เป็ด"}, {"n": "ช้าง"}, {"n": "กระรอก"}]}, {"title": "หมวกลืมไว้", "q": "ใครลืมหมวกไว้ที่ห้องพยาบาล?", "say": "มีหมวกสีเหลืองลืมไว้บนเตียงห้องพยาบาล เป็นของใครนะ", "hint": "หมวกมีรูสองรูสำหรับหูยาว ๆ ใครหูยาวและไม่ได้ใส่หมวก", "ans": 1, "why": "น้องกระต่ายหูยาว ไม่ได้ใส่หมวก หมวกมีรูให้หูยาวพอดี", "l2": {"q": "แล้วน้องกระต่ายควรทำอย่างไรดี?", "good": "🙋 กลับไปเอาหมวก และขอบคุณคุณครู", "bad": ["😤 ช่างมัน ไม่ต้องเก็บ", "😭 ร้องไห้โวยวาย"], "lesson": "ของใช้ของเรา ต้องดูแลและเก็บให้ดีนะคะ"}, "sus": [{"n": "หมี"}, {"n": "กระต่าย"}, {"n": "แกะ"}, {"n": "หมา"}]}, {"title": "แอบหลังพุ่มไม้", "q": "ใครแอบอยู่หลังพุ่มไม้?", "say": "งานเลี้ยงในสวน มีใครแอบอยู่หลังพุ่มไม้นะ", "hint": "ดูหลังพุ่มไม้สิคะ มีงวงยาว ๆ สีเทาโผล่ออกมา ถือเชือกลูกโป่งสีแดง", "ans": 1, "why": "น้องช้างมีงวงยาวสีเทา และถือลูกโป่งสีแดง", "l2": {"q": "แล้วน้องช้างควรทำอย่างไรดี?", "good": "🎈 ออกมาเล่นกับเพื่อน ๆ อย่างมีน้ำใจ", "bad": ["🙅 แอบอยู่คนเดียวทั้งวัน", "😠 ไม่ให้ใครเล่นด้วย"], "lesson": "ไปงานเลี้ยง ทักทายและเล่นกับเพื่อน ๆ ด้วยกันนะคะ"}, "sus": [{"n": "ม้าลาย"}, {"n": "ช้าง"}, {"n": "แมว"}, {"n": "ไก่"}]}, {"title": "กระถางล้ม", "q": "ที่ระเบียง ใครทำกระถางล้ม?", "say": "ที่ระเบียง ใครทำกระถางต้นไม้ล้มนะ ดินกับเมล็ดหกเต็มพื้นเลย", "hint": "บนพื้นมีขนนกสีเขียวกับเมล็ดทานตะวัน ใครมีขนสีเขียวและถือเมล็ดอยู่", "ans": 0, "why": "น้องนกแก้วขนสีเขียว ถือเมล็ดทานตะวันอยู่", "l2": {"q": "แล้วน้องนกแก้วควรทำอย่างไรดี?", "good": "🙏 ขอโทษเจ้าของ แล้วช่วยกวาดดิน", "bad": ["🐦 บินหนีไป", "👉 บอกว่าเพื่อนทำ"], "lesson": "ทำของเสียหาย ต้องพูดความจริง ขอโทษ และช่วยแก้ไขค่ะ"}, "sus": [{"n": "นกแก้ว"}, {"n": "หนู"}, {"n": "เต่า"}, {"n": "ม้า"}]}, {"title": "บอลตกบ่อ", "q": "ใครเตะบอลตกบ่อ?", "say": "ลูกฟุตบอลลอยอยู่กลางบ่อน้ำ ใครเตะไปตกนะ", "hint": "ริมบ่อมีรอยกีบเท้าเปื้อนโคลน ใครใส่ชุดฟุตบอลและขาเปียกเปื้อนโคลน", "ans": 0, "why": "น้องแพะใส่ชุดฟุตบอล ขาเปียกเปื้อนโคลน", "l2": {"q": "แล้วน้องแพะควรทำอย่างไรดี?", "good": "🙋 ขอให้ผู้ใหญ่ช่วยเอาบอลขึ้นมา", "bad": ["🏊 กระโดดลงบ่อไปเอาเอง", "😢 ทิ้งบอลไว้แล้วร้องไห้"], "lesson": "ห้ามลงน้ำเองนะคะ อันตรายมาก ต้องขอให้ผู้ใหญ่ช่วย"}, "sus": [{"n": "แพะ"}, {"n": "กระต่าย"}, {"n": "หมี"}, {"n": "เป็ด"}]}, {"title": "แปลงแครอท", "q": "ใครแอบกินแครอท?", "say": "ในแปลงผัก แครอทหายไปหนึ่งหัว ใครแอบเอาไปนะ", "hint": "ดูรอยเท้าเล็ก ๆ ข้างหลุมสิคะ อย่าเดาแค่หูยาวนะ ใครถือแครอทและมือเปื้อนดิน", "ans": 2, "why": "น้องแฮมสเตอร์ถือแครอท มือเปื้อนดิน ไม่ใช่กระต่ายนะ", "l2": {"q": "แล้วน้องแฮมสเตอร์ควรทำอย่างไรดี?", "good": "🙏 ขอโทษ และขออนุญาตก่อนเก็บผัก", "bad": ["🤫 แอบเก็บเพิ่มอีก", "🏃 วิ่งหนีไปเล่นต่อ"], "lesson": "ของของคนอื่น ต้องขออนุญาตก่อนหยิบนะคะ"}, "sus": [{"n": "กระต่าย"}, {"n": "แกะ"}, {"n": "แฮมสเตอร์"}, {"n": "วัว"}]}, {"title": "คุกกี้หาย", "q": "ใครแอบกินคุกกี้?", "say": "คุกกี้ในโหลหายหมดเลย ใครแอบกินนะ", "hint": "ดูเศษคุกกี้ช็อกโกแลตสิคะ ใครมีเศษคุกกี้ติดปาก", "ans": 1, "why": "น้องหมีมีเศษคุกกี้ช็อกโกแลตติดปากเลย", "l2": {"q": "แล้วน้องหมีควรทำอย่างไรดี?", "good": "🙏 ขอโทษ ครั้งหน้าขอก่อนและแบ่งเพื่อน", "bad": ["🍪 แอบกินอีกโหล", "🤫 เก็บเป็นความลับ"], "lesson": "อยากกินขนม ขอผู้ใหญ่ก่อน และแบ่งปันให้เพื่อนด้วยนะคะ"}, "sus": [{"n": "แมว"}, {"n": "หมี"}, {"n": "กระต่าย"}, {"n": "เป็ด"}]}, {"title": "กำแพงเลอะสี", "q": "ใครวาดบนกำแพง?", "say": "ใครวาดรูปบนกำแพงห้องนั่งเล่นนะ", "hint": "รอยวาดเป็นสีม่วง ใครถือสีเทียนสีม่วงอยู่", "ans": 1, "why": "น้องช้างถือสีเทียนม่วง งวงเปื้อนสีม่วงด้วย", "l2": {"q": "แล้วน้องช้างควรทำอย่างไรดี?", "good": "📄 วาดบนกระดาษ และช่วยเช็ดผนัง", "bad": ["🖍️ วาดบนผนังต่ออีก", "🙈 ซ่อนสีเทียนไว้"], "lesson": "วาดรูปต้องวาดบนกระดาษ ผนังไม่ใช่ที่วาดนะคะ"}, "sus": [{"n": "ยีราฟ"}, {"n": "ช้าง"}, {"n": "เพนกวิน"}, {"n": "หมู"}]}, {"title": "นมหก", "q": "ใครทำนมหก?", "say": "แก้วนมล้ม นมหกเต็มพื้นเลย ใครทำนะ", "hint": "ดูที่ปากเพื่อน ๆ สิคะ ใครมีหนวดนมสีขาวติดอยู่", "ans": 0, "why": "น้องลูกแมวมีหนวดนมติดปาก", "l2": {"q": "แล้วน้องลูกแมวควรทำอย่างไรดี?", "good": "🧻 เอาผ้ามาเช็ด แล้วบอกผู้ใหญ่", "bad": ["🐾 เดินเหยียบนมไปทั่ว", "🙈 ทำเป็นไม่รู้ไม่เห็น"], "lesson": "ทำน้ำหก ต้องรีบเช็ด จะได้ไม่มีใครลื่นล้มค่ะ"}, "sus": [{"n": "ลูกแมว"}, {"n": "หมา"}, {"n": "กบ"}, {"n": "นกฮูก"}]}, {"title": "พื้นเลอะโคลน", "q": "ใครเดินโคลนเข้าบ้าน?", "say": "พื้นบ้านสะอาด ๆ มีรอยโคลนเต็มไปหมด ใครเดินเข้ามานะ", "hint": "ดูรองเท้าบู๊ตกับตัวเพื่อน ๆ สิคะ ใครเปื้อนโคลน", "ans": 0, "why": "น้องหมูใส่บู๊ตเปื้อนโคลนทั้งตัว", "l2": {"q": "แล้วน้องหมูควรทำอย่างไรดี?", "good": "👢 ถอดบู๊ตไว้หน้าประตู และช่วยถูพื้น", "bad": ["🐷 วิ่งเข้าไปในห้องนอนต่อ", "👉 บอกว่าเพื่อนทำ"], "lesson": "ก่อนเข้าบ้าน ถอดรองเท้าที่เปื้อนไว้ข้างนอกนะคะ"}, "sus": [{"n": "หมู"}, {"n": "แกะ"}, {"n": "แมว"}, {"n": "กระต่าย"}]}, {"title": "แจกันแตก", "q": "ใครทำแจกันแตก?", "say": "แจกันตกแตก มีลูกฟุตบอลอยู่ข้าง ๆ ใครทำนะ", "hint": "มีลูกฟุตบอลอยู่ข้างแจกัน ใครแต่งชุดนักฟุตบอลนะ", "ans": 0, "why": "น้องจิ้งจอกใส่ชุดฟุตบอล เตะบอลโดนแจกัน", "l2": {"q": "แล้วน้องจิ้งจอกควรทำอย่างไรดี?", "good": "🙏 ขอโทษ และไปเล่นบอลข้างนอก", "bad": ["⚽ เตะบอลในบ้านต่อ", "👉 บอกว่าน้องแมวทำ"], "lesson": "เล่นบอลต้องเล่นข้างนอก ในบ้านของแตกได้ค่ะ"}, "sus": [{"n": "จิ้งจอก"}, {"n": "หมี"}, {"n": "แมว"}, {"n": "กระต่าย"}]}, {"title": "เค้กแหว่ง", "q": "ใครแอบกินเค้ก?", "say": "เค้กวันเกิดแหว่งไปหนึ่งคำ ใครแอบกินนะ", "hint": "ครีมเค้กเป็นสีชมพู ใครมีครีมสีชมพูติดหน้า", "ans": 0, "why": "น้องลิงมีครีมชมพูติดหน้าเต็มเลย", "l2": {"q": "แล้วน้องลิงควรทำอย่างไรดี?", "good": "🙏 ขอโทษ และรอกินพร้อมเพื่อน ๆ", "bad": ["🍰 แอบกินอีกคำ", "🤫 เก็บเป็นความลับ"], "lesson": "ของกินในงานเลี้ยง ต้องรอกินพร้อมกันนะคะ"}, "sus": [{"n": "ลิง"}, {"n": "ช้าง"}, {"n": "หมู"}, {"n": "แมว"}]}, {"title": "น้ำล้นอ่าง", "q": "ใครเปิดน้ำทิ้งไว้?", "say": "น้ำล้นอ่างล้างหน้า ใครเปิดก๊อกทิ้งไว้นะ", "hint": "ในอ่างมีแปรงสีฟันกับฟองยาสีฟัน ใครยังมีฟองยาสีฟันที่ปาก", "ans": 0, "why": "น้องกระต่ายยังมีฟองยาสีฟันติดปาก", "l2": {"q": "แล้วน้องกระต่ายควรทำอย่างไรดี?", "good": "🚰 ปิดก๊อกน้ำ และเช็ดพื้น", "bad": ["💦 เปิดน้ำเล่นต่อ", "🏃 วิ่งหนีไปเล่นต่อ"], "lesson": "ช่วยกันประหยัดน้ำ ใช้เสร็จแล้วปิดก๊อกทุกครั้งค่ะ"}, "sus": [{"n": "กระต่าย"}, {"n": "เต่า"}, {"n": "หมา"}, {"n": "หมี"}]}, {"title": "รถไฟของเล่น", "q": "ใครเอาหัวรถไฟไป?", "say": "รถไฟของเล่นไม่มีหัวรถจักรสีแดง ใครเอาไปนะ", "hint": "ขาดหัวรถไฟสีแดง ใครถือหัวรถไฟสีแดงอยู่", "ans": 0, "why": "น้องแรคคูนแอบถือหัวรถไฟสีแดง", "l2": {"q": "แล้วน้องแรคคูนควรทำอย่างไรดี?", "good": "🤝 คืนหัวรถไฟ และเล่นด้วยกัน", "bad": ["🙅 เก็บไว้เล่นคนเดียว", "😠 แย่งของเล่นอีก"], "lesson": "ของเล่นของส่วนรวม ต้องแบ่งกันเล่นนะคะ"}, "sus": [{"n": "แรคคูน"}, {"n": "ยีราฟ"}, {"n": "หมู"}, {"n": "เป็ด"}]}, {"title": "สีฟ้าหก", "q": "ใครทำสีหก?", "say": "ในห้องศิลปะ สีฟ้าหกเต็มพื้น ใครทำนะ", "hint": "มีรอยเท้าสีฟ้า ใครมือเท้าเปื้อนสีฟ้า", "ans": 0, "why": "น้องเพนกวินเปื้อนสีฟ้าที่มือกับเท้า", "l2": {"q": "แล้วน้องเพนกวินควรทำอย่างไรดี?", "good": "🧽 ช่วยเช็ดสี แล้วไปล้างมือ", "bad": ["🎨 ระบายสีบนพื้นต่อ", "🏃 วิ่งหนีไปเล่นต่อ"], "lesson": "ใช้สีต้องระวัง เล่นเสร็จแล้วช่วยกันเก็บกวาดค่ะ"}, "sus": [{"n": "เพนกวิน"}, {"n": "แมว"}, {"n": "หมี"}, {"n": "กระต่าย"}]}, {"title": "ร่มสีเหลือง", "q": "ใครลืมร่มไว้?", "say": "ฝนตก มีร่มสีเหลืองถูกลืมไว้ที่ประตู เป็นของใครนะ", "hint": "ร่มเป็นสีเหลือง หัวด้ามเป็นรูปเป็ด ใครตัวเปียกฝนเพราะไม่มีร่ม", "ans": 2, "why": "น้องเป็ดไม่มีร่มเลยเปียกฝน ร่มเหลืองหัวเป็ดเป็นของน้องเป็ด", "l2": {"q": "แล้วน้องเป็ดควรทำอย่างไรดี?", "good": "☂️ เก็บร่มไว้กับตัว แล้วเช็ดตัวให้แห้ง", "bad": ["🌧️ เล่นตากฝนต่อ", "😭 โทษว่าเพื่อนเอาร่มไป"], "lesson": "ของใช้ของเรา ต้องดูแลเอง ตากฝนแล้วอาจไม่สบายนะคะ"}, "sus": [{"n": "หมา"}, {"n": "แมว"}, {"n": "เป็ด"}, {"n": "หมู"}]}, {"title": "เปลือกกล้วย", "q": "ใครกินกล้วยแล้วทิ้งเปลือก?", "say": "มีเปลือกกล้วยเต็มพื้นบ้านต้นไม้ ใครกินแล้วไม่ทิ้งลงถังนะ", "hint": "ใครยังถือเปลือกกล้วยอยู่ในมือ", "ans": 1, "why": "น้องลิงยังถือเปลือกกล้วยอยู่เลย", "l2": {"q": "แล้วน้องลิงควรทำอย่างไรดี?", "good": "🗑️ ทิ้งเปลือกลงถังขยะ", "bad": ["🍌 โยนเปลือกทิ้งบนพื้น", "🙈 ทำเป็นไม่รู้ไม่เห็น"], "lesson": "ขยะต้องทิ้งลงถัง เปลือกกล้วยทำให้คนลื่นได้ค่ะ"}, "sus": [{"n": "ยีราฟ"}, {"n": "ลิง"}, {"n": "สิงโต"}, {"n": "ฮิปโป"}]}, {"title": "หมอนขาด", "q": "ใครทำหมอนขาด?", "say": "หมอนขาด ขนนกฟุ้งไปทั้งห้อง ใครทำนะ", "hint": "ระวังนะคะ น้องเป็ดมีขนอยู่แล้ว ดูว่าใครมีขนนกสีขาวติดหัว", "ans": 0, "why": "น้องหมามีขนนกจากหมอนติดหัว", "l2": {"q": "แล้วน้องหมาควรทำอย่างไรดี?", "good": "🙏 ขอโทษ และช่วยเก็บขนนก", "bad": ["🪶 เป่าขนนกเล่นต่อ", "👉 บอกว่าเพื่อนทำ"], "lesson": "เล่นแรงจนของเสีย ต้องขอโทษและช่วยเก็บนะคะ"}, "sus": [{"n": "หมา"}, {"n": "แมว"}, {"n": "เป็ด"}, {"n": "หนู"}]}, {"title": "ไอศกรีมหาย", "q": "ใครเปิดตู้เย็นทิ้งไว้?", "say": "ตู้เย็นเปิดค้าง ไอศกรีมหายไป ใครทำนะ", "hint": "ไอศกรีมเป็นสีชมพู ใครถือโคนไอศกรีมชมพูที่กำลังละลาย", "ans": 0, "why": "น้องหมีขาวถือไอศกรีมสีชมพู", "l2": {"q": "แล้วน้องหมีขาวควรทำอย่างไรดี?", "good": "🚪 ปิดตู้เย็นให้สนิท และขอก่อนกิน", "bad": ["🍦 เปิดตู้เย็นทิ้งไว้", "🤫 เก็บเป็นความลับ"], "lesson": "เปิดตู้เย็นแล้วต้องปิด ของข้างในจะได้ไม่เสียค่ะ"}, "sus": [{"n": "หมีขาว"}, {"n": "เพนกวิน"}, {"n": "แมวน้ำ"}, {"n": "กระต่าย"}]}, {"title": "กระเป๋าลืมไว้", "q": "ใครลืมกระเป๋าบนรถ?", "say": "มีกระเป๋าสีแดงพวงกุญแจดาวลืมไว้บนรถโรงเรียน เป็นของใครนะ", "hint": "กระเป๋ามีดาวสีทอง ใครไม่มีกระเป๋าและติดกิ๊บรูปดาวสีทอง", "ans": 2, "why": "น้องกระต่ายไม่มีกระเป๋า และติดกิ๊บดาวเหมือนพวงกุญแจ", "l2": {"q": "แล้วน้องกระต่ายควรทำอย่างไรดี?", "good": "🎒 ตรวจดูของก่อนลงจากรถทุกครั้ง", "bad": ["😴 ไม่สนใจ ปล่อยไว้", "😭 โทษคุณครู"], "lesson": "ก่อนลุกจากที่นั่ง ดูให้ดีว่าลืมของอะไรไหมนะคะ"}, "sus": [{"n": "แมว"}, {"n": "หมา"}, {"n": "กระต่าย"}, {"n": "หมี"}]}, {"title": "ทานตะวันหัก", "q": "ใครเด็ดดอกทานตะวัน?", "say": "ในสวนดอกไม้ ดอกทานตะวันหายไปหนึ่งดอก ใครเด็ดไปนะ", "hint": "ใครถือดอกทานตะวันอยู่", "ans": 0, "why": "น้องหมูถือดอกทานตะวันอยู่", "l2": {"q": "แล้วน้องหมูควรทำอย่างไรดี?", "good": "🙋 ขออนุญาตก่อนเด็ดดอกไม้", "bad": ["🌻 เด็ดเพิ่มอีกหลายดอก", "🤫 ซ่อนดอกไม้ไว้"], "lesson": "ดอกไม้ในสวนเป็นของทุกคน ชื่นชมได้แต่อย่าเด็ดนะคะ"}, "sus": [{"n": "หมู"}, {"n": "แกะ"}, {"n": "ไก่"}, {"n": "วัว"}]}, {"title": "น้ำผึ้งหก", "q": "ใครแอบกินน้ำผึ้ง?", "say": "โหลน้ำผึ้งล้ม น้ำผึ้งเลอะเต็มเลย ใครแอบกินนะ", "hint": "มีรอยเท้าเหนียว ๆ ใครมือกับปากเลอะน้ำผึ้ง", "ans": 0, "why": "น้องหมีมือกับปากเลอะน้ำผึ้ง", "l2": {"q": "แล้วน้องหมีควรทำอย่างไรดี?", "good": "🧼 ไปล้างมือ และช่วยเช็ดโต๊ะ", "bad": ["🍯 เอามือเหนียวไปจับของอื่น", "🏃 วิ่งหนีไปเล่นต่อ"], "lesson": "มือเลอะต้องล้างมือ แล้วช่วยกันทำความสะอาดค่ะ"}, "sus": [{"n": "หมี"}, {"n": "แมว"}, {"n": "หมา"}, {"n": "ม้า"}]}, {"title": "ทรายในบ้าน", "q": "ใครไปเที่ยวทะเลมา?", "say": "มีทรายกับเปลือกหอยอยู่หน้าบ้าน ใครเพิ่งกลับจากทะเลนะ", "hint": "ใครถือถังกับพลั่วเล่นทราย เท้าเปื้อนทราย", "ans": 0, "why": "น้องเต่าถือถังทราย เท้าเปื้อนทราย", "l2": {"q": "แล้วน้องเต่าควรทำอย่างไรดี?", "good": "🧹 ปัดทรายออกจากเท้าก่อนเข้าบ้าน", "bad": ["🏖️ เทถังทรายในบ้าน", "🙈 ทำเป็นไม่รู้ไม่เห็น"], "lesson": "กลับจากเล่นข้างนอก ปัดเท้าและล้างมือก่อนเข้าบ้านนะคะ"}, "sus": [{"n": "เต่า"}, {"n": "แมว"}, {"n": "หมา"}, {"n": "กระรอก"}]}, {"title": "เปลือกส้ม", "q": "ใครทิ้งเปลือกส้ม?", "say": "มีเปลือกส้มตกอยู่ข้างม้านั่ง ใครทิ้งไว้นะ", "hint": "ใครยังถือส้มที่ปอกไปครึ่งลูกอยู่", "ans": 0, "why": "น้องกระต่ายถือส้มปอกครึ่งลูก", "l2": {"q": "แล้วน้องกระต่ายควรทำอย่างไรดี?", "good": "🗑️ เก็บเปลือกส้มไปทิ้งถังขยะ", "bad": ["🍊 ทิ้งไว้ใต้ม้านั่ง", "🏃 วิ่งหนีไปเล่นต่อ"], "lesson": "สวนสาธารณะเป็นของทุกคน ช่วยกันรักษาความสะอาดค่ะ"}, "sus": [{"n": "กระต่าย"}, {"n": "หมี"}, {"n": "เป็ด"}, {"n": "ลิง"}]}, {"title": "ลูกโป่งแตก", "q": "ใครทำลูกโป่งแตก?", "say": "ปุ้ง! ลูกโป่งสีแดงแตก ใครทำนะ", "hint": "ใครตัวมีหนามแหลม ๆ และถือเชือกลูกโป่งที่ไม่มีลูกโป่ง", "ans": 0, "why": "น้องเม่นมีหนามแหลม ถือเชือกลูกโป่งที่แตก", "l2": {"q": "แล้วน้องเม่นควรทำอย่างไรดี?", "good": "🙏 ขอโทษเพื่อน เพราะทำลูกโป่งแตก", "bad": ["😆 หัวเราะชอบใจ", "🎈 ไปจิ้มลูกโป่งอันอื่นอีก"], "lesson": "ทำของเพื่อนเสียหายโดยไม่ตั้งใจ ก็ต้องขอโทษนะคะ"}, "sus": [{"n": "เม่น"}, {"n": "หมู"}, {"n": "แมว"}, {"n": "หมา"}]}, {"title": "หนังสือแหว่ง", "q": "ใครแทะหนังสือ?", "say": "หนังสือในห้องสมุดถูกแทะแหว่ง ใครทำนะ", "hint": "มีเศษกระดาษเล็ก ๆ ใครมีเศษกระดาษติดหนวด", "ans": 0, "why": "น้องหนูมีเศษกระดาษติดหนวด", "l2": {"q": "แล้วน้องหนูควรทำอย่างไรดี?", "good": "🙏 ขอโทษบรรณารักษ์ และถือหนังสือเบา ๆ", "bad": ["📖 ฉีกหน้าเล่นต่อ", "🤫 เก็บเป็นความลับ"], "lesson": "หนังสือห้องสมุดเป็นของทุกคน ต้องดูแลให้ดีค่ะ"}, "sus": [{"n": "หนู"}, {"n": "ยีราฟ"}, {"n": "นกฮูก"}, {"n": "หมี"}]}, {"title": "หมวกแดงหายไป", "q": "ใครหยิบหมวกแดงไป?", "say": "หมวกสีแดงติดดอกไม้หายไปจากตู้ ใครหยิบไปนะ", "hint": "ใครใส่หมวกแดงติดดอกไม้อยู่", "ans": 1, "why": "น้องแมวใส่หมวกแดงติดดอกไม้", "l2": {"q": "แล้วน้องแมวควรทำอย่างไรดี?", "good": "🙋 ขออนุญาตเจ้าของก่อนยืม", "bad": ["🎩 ใส่ไปเลยไม่ต้องถาม", "😠 ไม่ยอมคืน"], "lesson": "อยากยืมของคนอื่น ต้องขออนุญาตเจ้าของก่อนนะคะ"}, "sus": [{"n": "ยีราฟ"}, {"n": "แมว"}, {"n": "หมู"}, {"n": "ม้า"}]}, {"title": "แตงโมหาย", "q": "ใครกินแตงโม?", "say": "แตงโมหายไปหนึ่งชิ้น ใครกินนะ", "hint": "ใครมีเมล็ดแตงโมสีดำติดแก้ม", "ans": 0, "why": "น้องนกแก้วมีเมล็ดแตงโมติดแก้ม", "l2": {"q": "แล้วน้องนกแก้วควรทำอย่างไรดี?", "good": "🧻 เช็ดปาก และเก็บเมล็ดใส่จาน", "bad": ["🍉 ถ่มเมล็ดลงพื้น", "🏃 วิ่งหนีไปเล่นต่อ"], "lesson": "กินเสร็จแล้ว เก็บเศษอาหารให้เรียบร้อยค่ะ"}, "sus": [{"n": "นกแก้ว"}, {"n": "แมว"}, {"n": "หมา"}, {"n": "กระต่าย"}]}, {"title": "ไฟยังเปิด", "q": "ใครอ่านหนังสือจนดึก?", "say": "กลางคืนแล้ว ไฟยังเปิดอยู่ ใครแอบอ่านหนังสือนะ", "hint": "หนังสือปกสีเขียวมีรูปดาว ใครถือหนังสือแบบเดียวกัน", "ans": 0, "why": "น้องนกฮูกถือหนังสือปกเขียวมีดาว", "l2": {"q": "แล้วน้องนกฮูกควรทำอย่างไรดี?", "good": "😴 ปิดไฟ แล้วเข้านอนตรงเวลา", "bad": ["📖 อ่านต่อจนเช้า", "🔦 แอบเปิดไฟฉายใต้ผ้าห่ม"], "lesson": "เด็ก ๆ ต้องนอนให้พอ ร่างกายจะได้แข็งแรงนะคะ"}, "sus": [{"n": "นกฮูก"}, {"n": "แมว"}, {"n": "หมี"}, {"n": "กระต่าย"}]}, {"title": "ว่าวติดต้นไม้", "q": "ใครปีนต้นไม้?", "say": "ว่าวติดต้นไม้ มีกิ่งไม้หัก ใครปีนขึ้นไปนะ", "hint": "ใครมีใบไม้ติดตัวและถือเชือกว่าว", "ans": 0, "why": "น้องแมวมีใบไม้ติดตัว ถือเชือกว่าว", "l2": {"q": "แล้วน้องแมวควรทำอย่างไรดี?", "good": "🙋 ให้ผู้ใหญ่ช่วยเอาว่าวลงมา", "bad": ["🧗 ปีนขึ้นไปสูงกว่าเดิม", "🪨 ปาก้อนหินใส่ต้นไม้"], "lesson": "ปีนที่สูงอันตราย ให้ผู้ใหญ่ช่วยนะคะ"}, "sus": [{"n": "แมว"}, {"n": "หมู"}, {"n": "เป็ด"}, {"n": "หมี"}]}, {"title": "ปราสาททรายพัง", "q": "ใครเหยียบปราสาททราย?", "say": "ปราสาททรายพังหมดเลย ใครเหยียบนะ", "hint": "รอยเท้าใหญ่และกลมมาก ใครเท้าใหญ่ที่สุด", "ans": 1, "why": "น้องช้างเท้ากลมใหญ่ เปื้อนทราย", "l2": {"q": "แล้วน้องช้างควรทำอย่างไรดี?", "good": "🙏 ขอโทษ และช่วยเพื่อนสร้างใหม่", "bad": ["🐘 เหยียบให้พังอีก", "🏃 วิ่งหนีไปเล่นต่อ"], "lesson": "ทำของเพื่อนพัง ขอโทษแล้วช่วยกันสร้างใหม่ค่ะ"}, "sus": [{"n": "หนู"}, {"n": "ช้าง"}, {"n": "กระต่าย"}, {"n": "ไก่"}]}, {"title": "ชีสแหว่ง", "q": "ใครแอบกินชีส?", "say": "ชีสถูกแทะแหว่ง ใครแอบกินนะ", "hint": "รอยแทะเล็ก ๆ ใครมีเศษชีสติดปาก", "ans": 2, "why": "น้องหนูมีเศษชีสติดปาก", "l2": {"q": "แล้วน้องหนูควรทำอย่างไรดี?", "good": "🙋 ขอก่อนกิน และกินพอดี ๆ", "bad": ["🧀 แทะชีสทุกก้อน", "🤫 เก็บเป็นความลับ"], "lesson": "ของในครัว ต้องขออนุญาตก่อนกินนะคะ"}, "sus": [{"n": "ช้าง"}, {"n": "ยีราฟ"}, {"n": "หนู"}, {"n": "ม้า"}]}, {"title": "รอยเท้าหิมะ", "q": "ใครเพิ่งเล่นหิมะ?", "say": "มีหิมะละลายเป็นรอยเท้าในบ้าน ใครเพิ่งเข้ามานะ", "hint": "ใครมีเกล็ดหิมะติดผ้าพันคอและหมวก", "ans": 0, "why": "น้องเพนกวินมีหิมะติดผ้าพันคอ", "l2": {"q": "แล้วน้องเพนกวินควรทำอย่างไรดี?", "good": "👢 เช็ดเท้าบนพรมก่อนเข้าบ้าน", "bad": ["❄️ ปั้นหิมะในบ้าน", "🙈 ทำเป็นไม่รู้ไม่เห็น"], "lesson": "เช็ดเท้าก่อนเข้าบ้าน พื้นจะได้สะอาดค่ะ"}, "sus": [{"n": "เพนกวิน"}, {"n": "แมว"}, {"n": "หมา"}, {"n": "ลิง"}]}, {"title": "ไข่หายจากรัง", "q": "ใครเอาไข่ไป?", "say": "ไข่ในรังหายไป ใครเอาไปนะ", "hint": "ใครถือตะกร้าที่มีไข่อยู่", "ans": 1, "why": "น้องจิ้งจอกถือตะกร้าใส่ไข่", "l2": {"q": "แล้วน้องจิ้งจอกควรทำอย่างไรดี?", "good": "🥚 คืนไข่ให้แม่ไก่ และขอโทษ", "bad": ["🧺 เอาไข่ไปอีกฟอง", "🤫 เก็บเป็นความลับ"], "lesson": "ของของคนอื่น ห้ามเอาไปโดยไม่ขอนะคะ"}, "sus": [{"n": "ไก่"}, {"n": "จิ้งจอก"}, {"n": "วัว"}, {"n": "แกะ"}]}, {"title": "เสื้อติดรั้ว", "q": "ใครเสื้อขาดติดรั้ว?", "say": "มีเศษผ้าลายแดงขาวติดรั้ว เป็นเสื้อของใครนะ", "hint": "ผ้าเป็นลายทางแดงขาว ใครเสื้อลายเดียวกันขาดเป็นรู", "ans": 0, "why": "น้องหมีเสื้อลายแดงขาวขาดเป็นรู", "l2": {"q": "แล้วน้องหมีควรทำอย่างไรดี?", "good": "🙋 บอกคุณแม่ และจะไม่ปีนรั้วอีก", "bad": ["🧗 ปีนรั้วต่อ", "🙈 ซ่อนเสื้อที่ขาด"], "lesson": "ไม่ปีนรั้วนะคะ เสื้อขาดได้และอาจบาดเจ็บ"}, "sus": [{"n": "หมี"}, {"n": "แมว"}, {"n": "หมู"}, {"n": "หมา"}]}, {"title": "องุ่นหาย", "q": "ใครกินองุ่น?", "say": "องุ่นเหลือแต่ก้าน ใครกินนะ", "hint": "มีคราบสีม่วง ใครปากเป็นสีม่วง", "ans": 2, "why": "น้องยีราฟปากเปื้อนน้ำองุ่นสีม่วง", "l2": {"q": "แล้วน้องยีราฟควรทำอย่างไรดี?", "good": "🤲 แบ่งผลไม้ให้เพื่อน ๆ ด้วย", "bad": ["🍇 กินคนเดียวให้หมด", "🤫 เก็บเป็นความลับ"], "lesson": "ของอร่อย แบ่งปันกันกินจะมีความสุขกว่านะคะ"}, "sus": [{"n": "แกะ"}, {"n": "หมู"}, {"n": "ยีราฟ"}, {"n": "กระต่าย"}]}, {"title": "แอ่งน้ำกระจาย", "q": "ใครกระโดดลงแอ่งน้ำ?", "say": "น้ำในแอ่งกระจายเต็มเลย ใครกระโดดลงไปนะ", "hint": "รอยรองเท้าบู๊ตสีเขียว ใครใส่บู๊ตเขียวและเปียกโชก", "ans": 0, "why": "น้องกบใส่บู๊ตเขียว เปียกโชกเลย", "l2": {"q": "แล้วน้องกบควรทำอย่างไรดี?", "good": "🙏 ขอโทษเพื่อนที่โดนน้ำกระเด็น", "bad": ["💦 กระโดดแรงกว่าเดิม", "😆 หัวเราะเยาะเพื่อน"], "lesson": "เล่นสนุกได้ แต่ต้องไม่ทำให้คนอื่นเดือดร้อนค่ะ"}, "sus": [{"n": "กบ"}, {"n": "แมว"}, {"n": "หมา"}, {"n": "หมี"}]}, {"title": "ป๊อปคอร์นหก", "q": "ใครทำป๊อปคอร์นหก?", "say": "ป๊อปคอร์นหกเต็มโซฟา ใครทำนะ", "hint": "ใครมีป๊อปคอร์นติดขน", "ans": 0, "why": "น้องแกะมีป๊อปคอร์นติดขนเต็มเลย", "l2": {"q": "แล้วน้องแกะควรทำอย่างไรดี?", "good": "🧹 ช่วยเก็บป๊อปคอร์นที่หก", "bad": ["🍿 โปรยป๊อปคอร์นเล่นต่อ", "👉 บอกว่าเพื่อนทำ"], "lesson": "ทำของหก ช่วยกันเก็บให้เรียบร้อยนะคะ"}, "sus": [{"n": "แกะ"}, {"n": "หมา"}, {"n": "แมว"}, {"n": "ม้า"}]}, {"title": "ไหมพรมพันกัน", "q": "ใครเล่นไหมพรม?", "say": "ไหมพรมพันกันยุ่งไปทั้งห้อง ใครเล่นนะ", "hint": "ไหมพรมสีแดง ใครมีไหมพรมสีแดงพันตัว", "ans": 1, "why": "น้องลูกแมวมีไหมพรมพันตัว", "l2": {"q": "แล้วน้องลูกแมวควรทำอย่างไรดี?", "good": "🧶 ช่วยม้วนไหมพรมเก็บคืน", "bad": ["🐱 ดึงไหมพรมเล่นต่อ", "🏃 วิ่งหนีไปเล่นต่อ"], "lesson": "เล่นเสร็จแล้ว เก็บของให้เป็นระเบียบค่ะ"}, "sus": [{"n": "หมา"}, {"n": "ลูกแมว"}, {"n": "หมู"}, {"n": "เต่า"}]}, {"title": "กล่องข้าวลืมไว้", "q": "กล่องข้าวนี้ของใคร?", "say": "มีกล่องข้าวลายจุดสีชมพูลืมไว้ เป็นของใครนะ", "hint": "กล่องข้าวสีชมพูลายจุด ใครชุดลายเดียวกัน", "ans": 0, "why": "น้องหมูใส่ชุดลายจุดชมพูเหมือนกล่องข้าว", "l2": {"q": "แล้วน้องหมูควรทำอย่างไรดี?", "good": "😊 รับกล่องข้าวคืน แล้วพูดว่าขอบคุณ", "bad": ["😶 รับไปเฉย ๆ ไม่พูดอะไร", "😠 ดุว่าทำไมหยิบของฉัน"], "lesson": "เมื่อมีคนช่วยเรา ต้องพูดว่าขอบคุณนะคะ"}, "sus": [{"n": "หมู"}, {"n": "หมา"}, {"n": "กบ"}, {"n": "ไก่"}]}, {"title": "ปลาหายจากถัง", "q": "ใครเอาปลาไป?", "say": "ปลาในถังหายไป ใครเอาไปนะ", "hint": "มีรอยเท้าเปียก ใครตัวเปียกและถือปลา", "ans": 0, "why": "น้องนากตัวเปียกและถือปลาอยู่", "l2": {"q": "แล้วน้องนากควรทำอย่างไรดี?", "good": "🙋 ถามเจ้าของก่อนเอาปลาไป", "bad": ["🐟 เอาไปอีกหลายตัว", "🤫 เก็บเป็นความลับ"], "lesson": "ของของคนอื่น ต้องขอก่อนเสมอค่ะ"}, "sus": [{"n": "นาก"}, {"n": "แมว"}, {"n": "หมี"}, {"n": "กระต่าย"}]}, {"title": "บอลลายดาว", "q": "บอลลายดาวเป็นของใคร?", "say": "มีลูกบอลสีฟ้าลายดาวลืมไว้ เป็นของใครนะ", "hint": "ลูกบอลสีฟ้าลายดาวขาว ใครเสื้อลายเดียวกัน", "ans": 1, "why": "น้องแรคคูนเสื้อฟ้าลายดาวเหมือนลูกบอล", "l2": {"q": "แล้วน้องแรคคูนควรทำอย่างไรดี?", "good": "⚽ เก็บของเล่นกลับบ้านให้ครบ", "bad": ["🛝 ทิ้งไว้ที่สนามเด็กเล่น", "🙈 ทำเป็นไม่รู้ไม่เห็น"], "lesson": "เล่นเสร็จแล้ว เก็บของเล่นของเราให้ครบนะคะ"}, "sus": [{"n": "ม้า"}, {"n": "แรคคูน"}, {"n": "แกะ"}, {"n": "เป็ด"}]}, {"title": "ลูกอมหมด", "q": "ใครแอบกินลูกอม?", "say": "ลูกอมหมดโหล มีกระดาษห่อเต็มโต๊ะ ใครกินนะ", "hint": "ใครมีกระดาษห่อลูกอมเต็มกระเป๋าและลิ้นเป็นสีรุ้ง", "ans": 2, "why": "น้องหมามีกระดาษลูกอมเต็มกระเป๋า", "l2": {"q": "แล้วน้องหมาควรทำอย่างไรดี?", "good": "🪥 ไปแปรงฟัน และไม่แอบกินขนมอีก", "bad": ["🍬 กินลูกอมต่ออีก", "🤫 เก็บเป็นความลับ"], "lesson": "กินหวานเยอะฟันจะผุ กินแล้วต้องแปรงฟันนะคะ"}, "sus": [{"n": "หมี"}, {"n": "แมว"}, {"n": "หมา"}, {"n": "กระต่าย"}]}, {"title": "หมวกปลิว", "q": "หมวกนี้ของใคร?", "say": "ลมพัดหมวกฟางปลิวไปติดต้นไม้ เป็นของใครนะ", "hint": "เพื่อนคนอื่นใส่หมวกกันหมด ใครไม่มีหมวกและผมยุ่งเพราะลม", "ans": 1, "why": "น้องหมูไม่มีหมวก ผมยุ่ง ถือริบบิ้นแดง", "l2": {"q": "แล้วน้องหมูควรทำอย่างไรดี?", "good": "😊 ขอบคุณเพื่อนที่ช่วยหาหมวกให้", "bad": ["😤 บ่นว่าลมไม่ดี", "😭 ร้องไห้ไม่หยุด"], "lesson": "เมื่อมีคนช่วยเรา พูดว่าขอบคุณนะคะ"}, "sus": [{"n": "กระต่าย"}, {"n": "หมู"}, {"n": "แมว"}, {"n": "หมา"}]}, {"title": "แป้งหก", "q": "ใครทำแป้งหก?", "say": "แป้งหกขาวไปทั้งครัว ใครทำนะ", "hint": "ใครมีแป้งขาวเปื้อนเต็มตัว", "ans": 0, "why": "น้องแมวดำมีแป้งขาวเปื้อนเต็มตัว", "l2": {"q": "แล้วน้องแมวดำควรทำอย่างไรดี?", "good": "🧼 ไปอาบน้ำ แล้วช่วยเก็บแป้ง", "bad": ["🌨️ โปรยแป้งเล่นต่อ", "🏃 วิ่งหนีไปเล่นต่อ"], "lesson": "ในครัวมีของอันตราย ต้องมีผู้ใหญ่อยู่ด้วยทุกครั้งนะคะ"}, "sus": [{"n": "แมวดำ"}, {"n": "หมู"}, {"n": "หมี"}, {"n": "ไก่"}]}, {"title": "หลุมในสวน", "q": "ใครขุดหลุมในสวน?", "say": "ในสวนมีหลุมเต็มไปหมด ใครขุดนะ", "hint": "ใครมือเปื้อนดินและถือกระดูก", "ans": 2, "why": "น้องหมามือเปื้อนดินและถือกระดูก", "l2": {"q": "แล้วน้องหมาควรทำอย่างไรดี?", "good": "🌱 ช่วยกลบหลุมคืน และขอโทษ", "bad": ["🕳️ ขุดหลุมเพิ่มอีก", "🙈 ทำเป็นไม่รู้ไม่เห็น"], "lesson": "ช่วยกันดูแลสวน ไม่ทำให้เสียหายค่ะ"}, "sus": [{"n": "แมว"}, {"n": "กระต่าย"}, {"n": "หมา"}, {"n": "แกะ"}]}, {"title": "วันเกิดใคร", "q": "วันนี้วันเกิดใคร?", "say": "วันนี้มีเค้กวันเกิดตกแต่งด้วยขนมรูปปลา เป็นวันเกิดของใครนะ", "hint": "เค้กมีรูปปลา ใครชอบกินปลาและสวมมงกุฎวันเกิด", "ans": 1, "why": "น้องแมวชอบปลาและสวมมงกุฎวันเกิด", "l2": {"q": "แล้วน้องแมวควรทำอย่างไรดี?", "good": "🎂 ขอบคุณเพื่อน ๆ และแบ่งเค้กให้ทุกคน", "bad": ["🙅 กินเค้กคนเดียว", "😤 ไม่ชอบของขวัญ"], "lesson": "วันเกิดของเรา แบ่งปันความสุขให้เพื่อน ๆ ด้วยนะคะ"}, "sus": [{"n": "กระต่าย"}, {"n": "แมว"}, {"n": "หมี"}, {"n": "ลิง"}]}, {"title": "ผ้าห่มหาย", "q": "ใครเอาผ้าห่มไป?", "say": "ผ้าห่มบนโซฟาหายไป ใครเอาไปนะ", "hint": "ใครห่มผ้าห่มสีฟ้าอยู่", "ans": 3, "why": "น้องโคอาลาห่มผ้าห่มสีฟ้าอยู่", "l2": {"q": "แล้วน้องโคอาลาควรทำอย่างไรดี?", "good": "🙋 ถามก่อนใช้ แล้วเอาไปเก็บที่เดิม", "bad": ["🛌 เอาไปซ่อนในห้อง", "🤫 เก็บเป็นความลับ"], "lesson": "ของใช้ส่วนรวม ใช้เสร็จแล้วเก็บคืนที่เดิมค่ะ"}, "sus": [{"n": "หมี"}, {"n": "ม้า"}, {"n": "หมา"}, {"n": "โคอาลา"}]}, {"title": "ส้มหล่น", "q": "ใครทำตะกร้าส้มล้ม?", "say": "ส้มหล่นกลิ้งเต็มสวน ใครทำตะกร้าล้มนะ", "hint": "ใครถือตะกร้าเปล่าและมีใบส้มติดหัว", "ans": 1, "why": "น้องม้าถือตะกร้าเปล่า มีใบส้มติดหัว", "l2": {"q": "แล้วน้องม้าควรทำอย่างไรดี?", "good": "🧺 ช่วยเก็บส้มใส่ตะกร้าคืน", "bad": ["🍊 เตะส้มเล่น", "🏃 วิ่งหนีไปเล่นต่อ"], "lesson": "ทำของหก ช่วยกันเก็บให้เรียบร้อยนะคะ"}, "sus": [{"n": "กระรอก"}, {"n": "ม้า"}, {"n": "แกะ"}, {"n": "ไก่"}]}, {"title": "ใครช่วยกวาดบ้าน", "q": "ใครช่วยทำความสะอาดบ้าน?", "say": "บ้านสะอาดเอี่ยมเลย ใครช่วยกวาดบ้านนะ", "hint": "มีกองฝุ่นกับที่โกยผง ใครถือไม้กวาด", "ans": 2, "why": "น้องหมูถือไม้กวาด ช่วยกวาดบ้านเก่งมาก", "l2": {"q": "น้องหมูช่วยกวาดบ้าน เราควรพูดว่าอะไรดี?", "good": "😊 พูดขอบคุณ และชมว่าเก่งมาก", "bad": ["😶 ไม่พูดอะไรเลย", "😠 บอกว่ายังไม่สะอาด"], "lesson": "เห็นคนอื่นทำดี ชมเขาและพูดขอบคุณนะคะ"}, "sus": [{"n": "แมว"}, {"n": "หมา"}, {"n": "หมู"}, {"n": "กระต่าย"}]}];
+const AVAIL=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+const RINGS={"1": [45, 72, 18], "2": [30, 52, 12], "3": [66, 40, 14], "4": [62, 74, 16], "5": [60, 84, 12], "6": [49, 67, 16], "7": [25, 55, 20], "8": [60, 42, 22], "9": [39, 84, 20], "10": [55, 72, 20], "11": [85, 66, 14], "12": [50, 40, 18], "13": [35, 30, 18], "14": [56, 72, 16], "15": [35, 74, 18], "16": [62, 62, 12], "17": [35, 55, 22], "18": [40, 72, 16], "19": [50, 76, 14], "20": [66, 50, 16]};
+const BOOK=['บ้านแสนซน','โรงเรียนวุ่นวาย','สวนสนุก','ครัวป่วน','นักสืบชั้นยอด'];
+const BOOKIC=['🏠','🏫','🎡','🍰','🕵️'];
+
+const $=id=>document.getElementById(id);
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const store={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+let best1=store.get('detective-stars-v3',{}),best2=store.get('detective-stars-l2',{});
+let LV=store.get('detective-level',1)===2?2:1;
+let best=LV===2?best2:best1;
+const saveBest=()=>{store.set('detective-stars-v3',best1);store.set('detective-stars-l2',best2)};
+let cur=0,mist=0,done=false,token=0,stage=1;
+const has=i=>i>=0&&i<CASES.length&&AVAIL.includes(i+1);
+const pad=n=>String(n).padStart(2,'0');
+const imgS=i=>`img/c${pad(i+1)}-scene.jpg`, imgF=i=>`img/c${pad(i+1)}-friends.jpg`;
+const NUM=['หนึ่ง','สอง','สาม'];
+
+/* ---------- voice ---------- */
+let voiceOK=false,lastErr='';
+function diag(){if(voiceOK)return;let n=0,th=0;try{const a=speechSynthesis.getVoices();n=a.length;th=a.filter(v=>/^th/i.test(v.lang)).length}catch(e){}
+  const msg=!('speechSynthesis' in window)?'แอป/เบราว์เซอร์นี้ไม่รองรับการอ่านออกเสียง':(n===0?'เครื่องนี้ไม่มีเสียงอ่านเลย':(th===0?'เครื่องนี้ไม่มีเสียงอ่านภาษาไทย':'เสียงอ่านถูกปิดกั้น'+(lastErr?' ('+lastErr+')':'')));
+  $('diag').textContent='ตรวจเสียง: '+msg+` · เสียงทั้งหมด ${n} · ภาษาไทย ${th}`;$('novoice').hidden=false;$('novoice').textContent='🔇 ไม่มีเสียงโจทย์: '+msg+' — แนะนำเปิดเกมในเบราว์เซอร์ Chrome หรือ Safari บนมือถือ/แท็บเล็ต และติดตั้งเสียงภาษาไทย (iPhone: การตั้งค่า › การช่วยการเข้าถึง › เนื้อหาที่พูด › เสียง › ไทย / Android: การตั้งค่า › ข้อความเป็นเสียงพูด › Google › ภาษาไทย)'}
+let thaiVoices=[],chosen=store.get('detective-voice',''),utt=null,speakId=0;
+const FEMALE=/kanya|premwadee|achara|narisa|female|woman|ผู้หญิง|google/i, MALE=/niwat|pattara|male|ชาย/i;
+function score(v){let s=0;if(FEMALE.test(v.name))s+=3;if(MALE.test(v.name))s-=5;if(/premium|enhanced|natural|neural/i.test(v.name))s+=2;if(v.localService)s+=1;return s}
+function loadVoices(){
+  let all=[];try{all=speechSynthesis.getVoices()}catch(e){}
+  thaiVoices=all.filter(v=>/^th/i.test(v.lang)).sort((a,b)=>score(b)-score(a));
+  const sel=$('voiceSel');
+  $('novoice').hidden=!(all.length&&!thaiVoices.length);
+  if(!thaiVoices.length){sel.innerHTML='<option>ไม่พบเสียงภาษาไทย</option>';sel.disabled=true;return}
+  sel.disabled=false;
+  sel.innerHTML=thaiVoices.map(v=>`<option value="${v.name}">${v.name}</option>`).join('');
+  if(!thaiVoices.some(v=>v.name===chosen))chosen=thaiVoices[0].name;
+  sel.value=chosen;
+}
+function speaking(on){document.querySelectorAll('.spk').forEach(b=>b.classList.toggle('on',on))}
+/* say(): must be called directly from a tap the first time (phones block speech otherwise) */
+function say(t,cb){
+  const id=++speakId;let fired=false;
+  const fire=()=>{if(fired)return;fired=true;if(id===speakId)speaking(false);cb&&cb()};
+  try{
+    const s=window.speechSynthesis;
+    if(s){s.cancel();s.resume&&s.resume();
+      utt=new SpeechSynthesisUtterance(t);
+      const v=thaiVoices.find(v=>v.name===chosen)||thaiVoices[0];
+      if(v)utt.voice=v;utt.lang='th-TH';utt.rate=.85;utt.pitch=1.12;utt.volume=1;
+      utt.onstart=()=>{voiceOK=true;if(id===speakId)speaking(true)};utt.onend=fire;utt.onerror=ev=>{lastErr=(ev&&ev.error)||'error';fire();diag()};
+      setTimeout(()=>{if(!voiceOK)diag()},2500);
+      s.speak(utt);
+    }
+  }catch(e){}
+  setTimeout(fire,Math.max(3500,t.length*95));
+}
+try{loadVoices();speechSynthesis.onvoiceschanged=loadVoices}catch(e){}
+$('voiceSel').onchange=e=>{chosen=e.target.value;store.set('detective-voice',chosen);say('สวัสดีค่ะ หนูพร้อมเป็นนักสืบหรือยังคะ')};
+$('testVoice').onclick=()=>{loadVoices();say('สวัสดีค่ะ หนูพร้อมเป็นนักสืบหรือยังคะ')};
+
+/* ---------- sounds ---------- */
+let ac;
+function tone(fs,dur,type,vol){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();
+  fs.forEach((f,i)=>{const o=ac.createOscillator(),g=ac.createGain(),t=ac.currentTime+i*.12;o.type=type||'sine';o.frequency.value=f;
+  g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(vol||.16,t+.03);g.gain.exponentialRampToValueAtTime(.0001,t+dur);o.connect(g).connect(ac.destination);o.start(t);o.stop(t+dur+.05)})}catch(e){}}
+const yay=()=>tone([523,659,784,1047],.35,'triangle');
+const boop=()=>tone([330,262],.25,'sine',.1);
+
+/* ---------- home ---------- */
+const starStr=n=>[0,1,2].map(i=>i<n?'★':'<span class="off">★</span>').join('');
+const unlocked=i=>has(i)&&(i===0||!!best[i-1])&&(LV===1||!!best1[i]);
+function firstOpen(){for(let i=0;i<CASES.length;i++){if(has(i)&&!best[i])return unlocked(i)?i:-1}return has(0)?0:-1}
+function renderHome(){
+  const nowI=firstOpen();
+  const doneN=CASES.filter((c,k)=>has(k)&&best[k]).length;
+  $('progTxt').textContent=nowI<0?'เล่นระดับ 1 ก่อนนะ':`ผ่านแล้ว ${doneN} จาก ${AVAIL.length} ข้อ`;
+  $('progBar').style.width=(AVAIL.length?doneN/AVAIL.length*100:0)+'%';
+  const total=Object.values(best1).reduce((a,b)=>a+b,0)+Object.values(best2).reduce((a,b)=>a+b,0);
+  $('starsTotal').textContent='⭐ '+total;
+  const solved=CASES.filter((c,i)=>best[i]).length;
+  $('trophy').hidden=solved<CASES.length;
+  $('startTxt').textContent=nowI<0?'เล่นระดับ 1 ก่อนนะ':(solved===0?'เล่นเลย':'เล่นต่อ ข้อ '+(nowI+1));
+  $('m1').setAttribute('aria-pressed',LV===1);$('m2').setAttribute('aria-pressed',LV===2);
+}
+function setLV(n){LV=n;best=LV===2?best2:best1;store.set('detective-level',n);renderHome();
+  say(n===2?'ระดับสองค่ะ เด็กดี หาตัวคนซนแล้ว มาคิดกันว่าควรทำอย่างไรดี':'ระดับหนึ่งค่ะ มาหาตัวคนซนกัน')}
+$('m1').onclick=()=>setLV(1);$('m2').onclick=()=>setLV(2);
+
+$('restart').onclick=()=>{if(has(0)&&(LV===1||best1[0]))openCase(0)};
+$('startBtn').onclick=()=>{let i=firstOpen();if(i>=0&&CASES.every((c,k)=>!has(k)||best[k]))i=0;if(i<0){say('เล่นระดับหนึ่งก่อนนะคะ แล้วค่อยมาเล่นระดับสอง');setLV(1);return}openCase(i)};
+const show=id=>['home','caseScreen'].forEach(s=>$(s).hidden=s!==id);
+
+/* ---------- case ---------- */
+function openCase(i){
+  token++;cur=i;mist=0;done=false;stage=1;
+  $('win').hidden=true;$('zoom').hidden=true;
+  const c=CASES[i];
+  $('where').innerHTML=`ข้อ ${i+1}${LV===2?'<span class="lv2tag">ระดับ 2</span>':''}<small>${c.title}</small>`;
+  $('q').textContent=c.q;
+  $('why').hidden=true;$('l2').hidden=true;
+  const r=RINGS[i+1];
+  $('scene').innerHTML=`<img src="${imgS(i)}" alt="ภาพที่เกิดเหตุ">${r?`<div class="ringx" id="ring" style="left:${r[0]}%;top:${r[1]}%;width:${r[2]*2}%;aspect-ratio:1"></div>`:''}<span class="zoomtip">🔍</span>`;
+  $('lineup').innerHTML=`<img src="${imgF(i)}" alt="ผู้ต้องสงสัย 4 ตัว"><div class="hits">${c.sus.map((s,k)=>`<button class="sus" type="button" data-k="${k}" aria-label="${s.n}"></button>`).join('')}</div><div class="names">${c.sus.map(s=>`<span>${s.n}</span>`).join('')}</div>`;
+  show('caseScreen');$('caseScreen').scrollTop=0;
+  if(has(i+1)){new Image().src=imgS(i+1);new Image().src=imgF(i+1)}
+  say('ข้อที่ '+(i+1)+' ค่ะ '+c.say+' แตะเลือกเพื่อนที่ทำได้เลยค่ะ');
+}
+$('lineup').addEventListener('click',e=>{
+  const b=e.target.closest('.sus');if(!b||done)return;
+  const c=CASES[cur],k=+b.dataset.k;
+  if(k===c.ans){done=true;b.classList.add('yes');$('why').textContent='✔ '+c.why;$('why').hidden=false;
+    if(LV===2){stage=2;showL2()}else win()}
+  else{mist++;boop();b.classList.remove('no');void b.offsetWidth;b.classList.add('no');say('น้อง'+c.sus[k].n+'ไม่ได้ทำนะคะ ลองดูภาพอีกทีนะ')}
+});
+const plain=t=>t.replace(/^\S+\s/,'');
+const emo=t=>t.split(' ')[0];
+let curOpts=[];
+function readOpts(prefix){const L=CASES[cur].l2;say((prefix||'')+L.q.replace('?','')+' '+curOpts.map((o,k)=>'ข้อ'+NUM[k]+' '+plain(o.t)).join(' ')+' เลือกเลยค่ะ')}
+function showL2(){
+  const c=CASES[cur],L=c.l2;tone([523,659],.25,'triangle');
+  curOpts=[{t:L.good,ok:1},{t:L.bad[0]},{t:L.bad[1]}].sort(()=>Math.random()-.5);
+  $('l2q').textContent=L.q;
+  $('opts').innerHTML=curOpts.map((o,k)=>`<div class="optrow"><button class="opt" type="button" data-k="${k}"><span class="em">${emo(o.t)}</span><span>${plain(o.t)}</span></button><button class="mini press" type="button" data-say="${k}" aria-label="ฟังข้อนี้">🔊</button></div>`).join('');
+  $('l2').hidden=false;
+  setTimeout(()=>$('l2').scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'}),250);
+  readOpts('ถูกต้องค่ะ '+c.why+' แล้ว');
+}
+$('opts').addEventListener('click',e=>{
+  const m=e.target.closest('.mini');if(m){say(plain(curOpts[+m.dataset.say].t));return}
+  const b=e.target.closest('.opt');if(!b||stage!==2)return;
+  if(curOpts[+b.dataset.k].ok){stage=3;b.classList.add('yes');win()}
+  else{mist++;boop();b.classList.remove('no');void b.offsetWidth;b.classList.add('no');say('ลองคิดใหม่นะคะ ถ้าเป็นหนู หนูจะทำแบบนี้ไหมเอ่ย')}
+});
+$('say2').onclick=()=>readOpts('');
+$('hintBtn').onclick=()=>{if(stage===2){say('ทางไหนที่ทำให้ทุกคนสบายใจ และเป็นเด็กดีนะคะ');return}
+  say(CASES[cur].hint);const r=$('ring');if(r){r.classList.remove('on');void r.offsetWidth;r.classList.add('on')}};
+$('sayBtn').onclick=()=>say(CASES[cur].say);
+$('scene').onclick=()=>{$('zs').innerHTML=`<img src="${imgS(cur)}" alt="ภาพขยาย">`;$('zoom').hidden=false;const z=$('zs');setTimeout(()=>{z.scrollLeft=(z.scrollWidth-z.clientWidth)/2},50)};
+$('zclose').onclick=()=>{$('zoom').hidden=true};
+
+function win(){
+  const c=CASES[cur],s=mist===0?3:mist===1?2:1;
+  best[cur]=Math.max(best[cur]||0,s);saveBest();
+  yay();confetti();
+  const my=token, nextI=cur+1, canNext=unlocked(nextI);
+  const msg=LV===2?c.l2.lesson:c.why;
+  $('winTitle').textContent=['','เก่งแล้ว!','เก่งมาก!','สุดยอด!'][s];
+  $('winStars').innerHTML=[0,1,2].map(k=>`<span class="${k<s?'on':''}">★</span>`).join('');
+  $('winWhy').textContent=(LV===2?'💜 ':'')+msg;
+  $('nextBtn').textContent=canNext?'ไปต่อ ▶':'กลับหน้าแรก';
+  $('winBar').hidden=!canNext;
+  const t0=Date.now();
+  setTimeout(()=>{if(my!==token)return;const w=$('win');w.classList.remove('go');w.hidden=false;void w.offsetWidth;w.classList.add('go')},600);
+  const tail=canNext?' ไปข้อต่อไปกันเลย':(nextI>=CASES.length?' หนูเล่นครบทุกข้อแล้ว เก่งที่สุดเลยค่ะ':' ข้อต่อไปยังวาดไม่เสร็จนะคะ');
+  say('เก่งมากเลยค่ะ '+msg+tail,()=>{
+    if(!canNext)return;
+    setTimeout(()=>{if(my===token&&!$('caseScreen').hidden)openCase(nextI)},Math.max(800,6500-(Date.now()-t0)));
+  });
+}
+$('nextBtn').onclick=()=>{const n=cur+1;if(unlocked(n))openCase(n);else goHome()};
+function confetti(){
+  if(reduce)return;const set=['⭐','✨','🎉','🌟','💖'];
+  for(let i=0;i<22;i++){const s=document.createElement('span');s.className='conf';s.textContent=set[i%set.length];
+    s.style.left=Math.random()*100+'vw';s.style.animationDuration=(1.8+Math.random()*1.4)+'s';s.style.animationDelay=(Math.random()*.4)+'s';
+    document.body.appendChild(s);setTimeout(()=>s.remove(),3800)}
+}
+function goHome(){token++;$('zoom').hidden=true;$('win').hidden=true;try{speechSynthesis.cancel()}catch(e){};speaking(false);renderHome();show('home')}
+$('back').onclick=goHome;$('toHome').onclick=goHome;
+renderHome();
+/* greet: phones only allow speech after the first tap, so also greet on that first tap */
+let greeted=false;
+const greet=()=>{if(greeted)return;greeted=true;say('สวัสดีค่ะ นักสืบตัวจิ๋ว กดปุ่มสีชมพูเพื่อเล่นได้เลยค่ะ')};
+setTimeout(()=>{try{if(speechSynthesis.getVoices().length)greet()}catch(e){}},700);
+document.addEventListener('pointerdown',e=>{try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();ac.resume()}catch(_){}
+  if(!greeted&&$('home').hidden===false&&!e.target.closest('button,select,summary')){greet()}},{once:false,capture:true});
+</script>
+
+</body></html>

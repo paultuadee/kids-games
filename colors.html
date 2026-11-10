@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ห้องทดลองผสมสี</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mali:wght@600;700&display=swap">
+<style>
+/* Layout: a lab table — the mixing bowl in the middle, paint jars as big buttons below, a mission card on top */
+:root{--cream:#fff7ee;--ink:#5b4636;--soft:#9a8574;--berry:#f2768c;--sun:#ffd166;--mint-d:#4fb784;--sky:#7cc0ef;
+  --shadow:0 6px 0 rgba(91,70,54,.13);--font:'Mali','Sarabun','Noto Sans Thai',system-ui,sans-serif;color-scheme:light}
+[hidden]{display:none!important}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{font-family:var(--font);color:var(--ink);font-weight:600;overflow:hidden;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;
+  background:radial-gradient(40vmax 30vmax at 100% 0%,#d9ecfb,transparent 70%),radial-gradient(40vmax 30vmax at 0% 100%,#dff3e8,transparent 70%),var(--cream)}
+button{font-family:inherit;color:inherit;font-weight:700;border:0;cursor:pointer}
+button:focus-visible,a:focus-visible{outline:4px solid var(--sky);outline-offset:3px}
+.app{height:100%;overflow-y:auto;max-width:560px;margin:0 auto;padding:max(10px,env(safe-area-inset-top,0px)) max(14px,env(safe-area-inset-right,0px)) calc(20px + env(safe-area-inset-bottom,0px)) max(14px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:14px}
+.top{display:flex;align-items:center;gap:10px}
+.round{width:52px;height:52px;border-radius:50%;background:#fff;box-shadow:var(--shadow);font-size:24px;display:grid;place-items:center;flex:none;text-decoration:none;color:var(--ink)}
+.top h1{flex:1;margin:0;text-align:center;font-size:clamp(22px,6.5vw,30px);color:#2f8fc9}
+.modes{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mode{background:#fff;border-radius:22px;padding:10px;font-size:17px;box-shadow:var(--shadow);border:4px solid transparent}
+.mode[aria-pressed="true"]{border-color:var(--sky)}
+.mission{background:#fff;border-radius:24px;padding:12px 14px;box-shadow:var(--shadow);display:flex;align-items:center;gap:12px;font-size:20px}
+.mission .dot{width:54px;height:54px;border-radius:50%;flex:none;box-shadow:inset 0 0 0 4px rgba(255,255,255,.7),0 3px 0 rgba(91,70,54,.15)}
+.lab{position:relative;background:#fff;border-radius:30px;box-shadow:var(--shadow);padding:12px 12px 16px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.lab svg{width:min(100%,320px);height:auto;overflow:visible}
+.result{font-size:clamp(24px,7vw,32px);min-height:1.3em;text-align:center}
+.recipe{font-size:16px;color:var(--soft);min-height:1.4em;text-align:center}
+.jars{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.jar{background:#fff;border-radius:22px;padding:8px 2px 6px;box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;gap:4px;font-size:14px}
+.jar .p{width:46px;height:46px;border-radius:50% 50% 46% 46%;box-shadow:inset 0 -6px 0 rgba(0,0,0,.12),inset 0 0 0 3px rgba(255,255,255,.5)}
+.jar:active{transform:scale(.92)}
+.row{display:flex;gap:10px}
+.btn{flex:1;background:#fff;border-radius:999px;padding:12px;font-size:19px;box-shadow:var(--shadow)}
+.btn.main{background:var(--mint-d);color:#fff;box-shadow:0 6px 0 #3a9a6b}
+.btn:active{transform:translateY(3px)}
+.drop{position:fixed;width:26px;height:32px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;pointer-events:none;z-index:5;transition:transform .55s cubic-bezier(.5,0,.8,.6),opacity .55s}
+.ripple{transform-origin:160px 120px;animation:rip .6s ease-out}
+@keyframes rip{0%{transform:scale(.9)}50%{transform:scale(1.05)}100%{transform:scale(1)}}
+.cheer{position:fixed;inset:0;display:grid;place-items:center;pointer-events:none;font-size:90px;animation:cheer 1.4s ease-out forwards;z-index:9}
+@keyframes cheer{0%{opacity:0;transform:scale(.4)}30%{opacity:1;transform:scale(1.1)}100%{opacity:0;transform:scale(1.3)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head><body>
+<div class="app">
+  <div class="top">
+    <a class="round" href="index.html" aria-label="กลับไปหน้ารวมเกม">🏠</a>
+    <h1>ห้องทดลองผสมสี</h1>
+    <button class="round" id="sayBtn" type="button" aria-label="ฟังอีกครั้ง">🔊</button>
+  </div>
+  <div class="modes">
+    <button class="mode" id="mFree" type="button" aria-pressed="true">🧪 ผสมเล่น</button>
+    <button class="mode" id="mQuiz" type="button" aria-pressed="false">🎯 ภารกิจสี</button>
+  </div>
+  <div class="mission" id="mission" hidden><span class="dot" id="mDot"></span><span id="mText"></span></div>
+  <div class="lab">
+    <svg viewBox="0 0 320 210" id="bowl" aria-label="ถาดผสมสี">
+      <defs><clipPath id="bowlClip"><path d="M30 80 Q30 196 160 196 Q290 196 290 80Z"/></clipPath></defs>
+      <ellipse cx="160" cy="200" rx="120" ry="8" fill="#000" opacity=".08"/>
+      <path d="M30 80 Q30 196 160 196 Q290 196 290 80Z" fill="#f6f1ea"/>
+      <g clip-path="url(#bowlClip)"><g id="liquidG"><rect id="liquid" x="20" y="200" width="280" height="140" fill="#fff"/><ellipse id="liqTop" cx="160" cy="200" rx="128" ry="12" fill="#fff"/></g></g>
+      <path d="M30 80 Q30 196 160 196 Q290 196 290 80" fill="none" stroke="#5b4636" stroke-width="5" stroke-linecap="round"/>
+      <ellipse cx="160" cy="80" rx="130" ry="18" fill="none" stroke="#5b4636" stroke-width="5"/>
+      <path d="M60 110 Q66 150 96 170" stroke="#fff" stroke-width="8" stroke-linecap="round" fill="none" opacity=".7"/>
+    </svg>
+    <div class="result" id="result">แตะขวดสี แล้วโยนลงถาดเลย!</div>
+    <div class="recipe" id="recipe"></div>
+  </div>
+  <div class="jars" id="jars"></div>
+  <div class="row">
+    <button class="btn" id="clear" type="button">🧽 ล้างถาด</button>
+    <button class="btn main" id="next" type="button" hidden>ภารกิจต่อไป ▶</button>
+  </div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const JARS=[{k:'r',n:'แดง',c:'#e8453c'},{k:'y',n:'เหลือง',c:'#f7c72e'},{k:'b',n:'น้ำเงิน',c:'#2f6fd6'},{k:'w',n:'ขาว',c:'#ffffff'},{k:'k',n:'ดำ',c:'#2b2b33'}];
+let cnt={r:0,y:0,b:0,w:0,k:0},mode='free',goal=null,lastSpeech='';
+
+/* RYB -> RGB (trilinear on the painter's colour cube) */
+const CUBE={'000':[1,1,1],'100':[1,0,0],'010':[1,1,0],'001':[.163,.373,.6],'110':[1,.5,0],'101':[.5,0,.5],'011':[0,.66,.2],'111':[.5,.32,.14]};
+function ryb2rgb(r,y,b){const out=[0,0,0];for(const R of[0,1])for(const Y of[0,1])for(const B of[0,1]){const w=(R?r:1-r)*(Y?y:1-y)*(B?b:1-b),c=CUBE[`${R}${Y}${B}`];for(let i=0;i<3;i++)out[i]+=w*c[i]}return out}
+function mixColor(){
+  const {r,y,b,w,k}=cnt,tot=r+y+b+w+k;if(!tot)return null;
+  let rgb=[1,1,1];const m=Math.max(r,y,b);
+  if(m)rgb=ryb2rgb(r/m,y/m,b/m);
+  const col=r+y+b,wf=w/tot,kf=k/tot;
+  if(!col){rgb=[1-kf*.85,1-kf*.85,1-kf*.85]}
+  else{rgb=rgb.map(v=>v*(1-wf)+wf);rgb=rgb.map(v=>v*(1-kf*.8))}
+  return '#'+rgb.map(v=>Math.round(Math.max(0,Math.min(1,v))*255).toString(16).padStart(2,'0')).join('');
+}
+function mixName(){
+  const {r,y,b,w,k}=cnt;if(r+y+b+w+k===0)return '';
+  const P=(r>0)+(y>0)+(b>0);
+  let base='';
+  if(P===0)base=w&&k?'เทา':(w?'ขาว':'ดำ');
+  else if(P===3)base='น้ำตาล';
+  else if(P===2)base=r&&b?'ม่วง':(r&&y?'ส้ม':'เขียว');
+  else base=r?'แดง':(y?'เหลือง':'น้ำเงิน');
+  if(P>0&&w&&!k){base={แดง:'ชมพู',น้ำเงิน:'ฟ้า',ม่วง:'ม่วงอ่อน',เขียว:'เขียวอ่อน',ส้ม:'ส้มอ่อน',เหลือง:'เหลืองอ่อน',น้ำตาล:'น้ำตาลอ่อน'}[base]}
+  if(P>0&&k&&!w){base=base+'เข้ม'}
+  if(P>0&&k&&w){base=base+'หม่น'}
+  return base;
+}
+const GOALS=[
+  {n:'ส้ม',need:'แดง กับ เหลือง'},{n:'เขียว',need:'เหลือง กับ น้ำเงิน'},{n:'ม่วง',need:'แดง กับ น้ำเงิน'},
+  {n:'ชมพู',need:'แดง กับ ขาว'},{n:'ฟ้า',need:'น้ำเงิน กับ ขาว'},{n:'เทา',need:'ขาว กับ ดำ'},{n:'น้ำตาล',need:'แดง เหลือง และ น้ำเงิน'}];
+const GOALC={ส้ม:'#ff8a1f',เขียว:'#3aa84e',ม่วง:'#8a3fb0',ชมพู:'#f59ab8',ฟ้า:'#8cc4ef',เทา:'#9a9aa2',น้ำตาล:'#8a5a2b'};
+let gi=0;
+
+function renderJars(){$('jars').innerHTML=JARS.map(j=>`<button class="jar" type="button" data-k="${j.k}" aria-label="สี${j.n}"><span class="p" style="background:${j.c}"></span>${j.n}</button>`).join('')}
+function update(anim){
+  const c=mixColor(),tot=Object.values(cnt).reduce((a,b)=>a+b,0);
+  const lvl=tot?Math.min(80,22+tot*9):0, y=196-lvl;
+  $('liquid').setAttribute('y',y);$('liquid').setAttribute('fill',c||'#fff');
+  $('liqTop').setAttribute('cy',y);$('liqTop').setAttribute('fill',c||'#fff');
+  if(anim){const g=$('liquidG');g.classList.remove('ripple');void g.getBBox();g.classList.add('ripple')}
+  const nm=mixName();
+  const used=JARS.filter(j=>cnt[j.k]).map(j=>j.n);
+  $('result').innerHTML=tot?`ได้สี <b style="color:${c==='#ffffff'?'#9a8574':c}">${nm}</b>`:'แตะขวดสี แล้วโยนลงถาดเลย!';
+  $('recipe').textContent=used.length>1?used.join(' + ')+' = '+nm:'';
+  return {nm,used};
+}
+function addColor(k,btn){
+  const j=JARS.find(x=>x.k===k);cnt[k]++;
+  // flying drop
+  const r=btn.getBoundingClientRect(),b=$('bowl').getBoundingClientRect();
+  const d=document.createElement('div');d.className='drop';d.style.background=j.c;d.style.border=k==='w'?'2px solid #ddd':'';d.style.left=(r.left+r.width/2-13)+'px';d.style.top=(r.top)+'px';document.body.appendChild(d);
+  requestAnimationFrame(()=>{d.style.transform=`translate(${b.left+b.width/2-(r.left+r.width/2)}px,${b.top+b.height*.45-r.top}px) scale(.7)`;d.style.opacity='.2'});
+  setTimeout(()=>{d.remove();plop();const {nm,used}=update(true);
+    if(used.length>1)say(used.join(' กับ ')+' ได้สี'+nm);else say('สี'+j.n);
+    if(mode==='quiz')check(nm)},560);
+}
+function check(nm){
+  const g=GOALS[gi];
+  if(nm===g.n){cheer('🎉');tone([523,659,784,1047],.3,'triangle');say('เก่งมาก ทำสี'+g.n+'ได้แล้ว '+g.need+' ได้สี'+g.n);$('next').hidden=false}
+  else if(Object.values(cnt).reduce((a,b)=>a+b,0)>=5&&nm!==g.n){say('ยังไม่ใช่สี'+g.n+'นะ ลองล้างถาดแล้วผสมใหม่');}
+}
+function setGoal(){const g=GOALS[gi];$('mDot').style.background=GOALC[g.n];$('mText').innerHTML=`ทำ <b>สี${g.n}</b> ให้ได้ไหม?`;$('next').hidden=true;say('ภารกิจ ทำสี'+g.n+'ให้ได้ไหมคะ')}
+function setMode(m){mode=m;$('mFree').setAttribute('aria-pressed',m==='free');$('mQuiz').setAttribute('aria-pressed',m==='quiz');$('mission').hidden=m!=='quiz';clearBowl(true);
+  if(m==='quiz'){gi=0;setGoal()}else{$('next').hidden=true;say('ผสมเล่นค่ะ แตะขวดสีแล้วดูว่าได้สีอะไร')}}
+function clearBowl(quiet){cnt={r:0,y:0,b:0,w:0,k:0};update(false);if(!quiet){say('ล้างถาดแล้ว');tone([880,660],.12)}}
+$('jars').onclick=e=>{const b=e.target.closest('.jar');if(b)addColor(b.dataset.k,b)};
+$('clear').onclick=()=>clearBowl(false);
+$('mFree').onclick=()=>setMode('free');$('mQuiz').onclick=()=>setMode('quiz');
+$('next').onclick=()=>{gi=(gi+1)%GOALS.length;clearBowl(true);setGoal()};
+$('sayBtn').onclick=()=>{if(mode==='quiz'){const g=GOALS[gi];say('ทำสี'+g.n+'ให้ได้ไหมคะ')}else say(lastSpeech||'แตะขวดสี แล้วโยนลงถาดเลย')};
+function cheer(e){const c=document.createElement('div');c.className='cheer';c.textContent=e;document.body.appendChild(c);setTimeout(()=>c.remove(),1500)}
+
+let ac;function tone(fs,d,type){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();fs.forEach((f,i)=>{const o=ac.createOscillator(),g=ac.createGain(),t=ac.currentTime+i*.1;o.type=type||'sine';o.frequency.value=f;g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.14,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g).connect(ac.destination);o.start(t);o.stop(t+d+.05)})}catch(e){}}
+const plop=()=>tone([420,280],.12);
+let utt;function say(t){lastSpeech=t;try{const s=speechSynthesis;s.cancel();utt=new SpeechSynthesisUtterance(t);const v=s.getVoices().filter(v=>/^th/i.test(v.lang)).sort((a,b)=>(/kanya|premwadee|female|google/i.test(b.name)?1:0)-(/kanya|premwadee|female|google/i.test(a.name)?1:0))[0];if(v)utt.voice=v;utt.lang='th-TH';utt.rate=.85;utt.pitch=1.12;s.speak(utt)}catch(e){}}
+renderJars();update(false);
+</script>
+</body></html>
