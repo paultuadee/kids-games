@@ -23,8 +23,18 @@ button:focus-visible,a:focus-visible{outline:4px solid var(--sky);outline-offset
 .mode[aria-pressed="true"]{border-color:var(--sky)}
 .mission{background:#fff;border-radius:24px;padding:12px 14px;box-shadow:var(--shadow);display:flex;align-items:center;gap:12px;font-size:20px}
 .mission .dot{width:54px;height:54px;border-radius:50%;flex:none;box-shadow:inset 0 0 0 4px rgba(255,255,255,.7),0 3px 0 rgba(91,70,54,.15)}
-.lab{position:relative;background:#fff;border-radius:30px;box-shadow:var(--shadow);padding:12px 12px 16px;display:flex;flex-direction:column;align-items:center;gap:6px}
-.lab svg{width:min(100%,320px);height:auto;overflow:visible}
+.lab{position:relative;background:#fff url(img/c-bg.jpg) center/cover;border-radius:30px;box-shadow:var(--shadow);padding:12px 12px 16px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.mascot{position:absolute;left:6px;bottom:6px;width:26%;max-width:120px;pointer-events:none;animation:wave 2.6s ease-in-out infinite;transform-origin:50% 100%}
+@keyframes wave{50%{transform:rotate(-4deg) translateY(-3px)}}
+.bowl{position:relative;width:min(78%,300px);aspect-ratio:1;margin-top:4px}
+.bowl img{width:100%;height:100%;object-fit:contain;display:block;filter:drop-shadow(0 8px 10px rgba(0,0,0,.18))}
+.liq,.liq2{position:absolute;left:50%;top:50%;width:0;height:0;border-radius:50%;transform:translate(-50%,-50%);transition:width .5s,height .5s,background .6s;pointer-events:none}
+.liq{box-shadow:inset 0 -10px 18px rgba(0,0,0,.15),inset 0 10px 14px rgba(255,255,255,.35)}
+.liq2{background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.55),transparent 45%)}
+.liq.rip{animation:liqrip .6s ease-out}
+@keyframes liqrip{40%{transform:translate(-50%,-50%) scale(1.06)}}
+.result,.recipe{background:rgba(255,255,255,.88);border-radius:999px;padding:2px 14px}
+.jar .p{display:none}.jar img{width:56px;height:56px;object-fit:contain}
 .result{font-size:clamp(24px,7vw,32px);min-height:1.3em;text-align:center}
 .recipe{font-size:16px;color:var(--soft);min-height:1.4em;text-align:center}
 .jars{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
@@ -41,7 +51,9 @@ button:focus-visible,a:focus-visible{outline:4px solid var(--sky);outline-offset
 .cheer{position:fixed;inset:0;display:grid;place-items:center;pointer-events:none;font-size:90px;animation:cheer 1.4s ease-out forwards;z-index:9}
 @keyframes cheer{0%{opacity:0;transform:scale(.4)}30%{opacity:1;transform:scale(1.1)}100%{opacity:0;transform:scale(1.3)}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-</style></head><body>
+</style>
+<script src="voice.js"></script>
+</head><body>
 <div class="app">
   <div class="top">
     <a class="round" href="index.html" aria-label="กลับไปหน้ารวมเกม">🏠</a>
@@ -53,16 +65,8 @@ button:focus-visible,a:focus-visible{outline:4px solid var(--sky);outline-offset
     <button class="mode" id="mQuiz" type="button" aria-pressed="false">🎯 ภารกิจสี</button>
   </div>
   <div class="mission" id="mission" hidden><span class="dot" id="mDot"></span><span id="mText"></span></div>
-  <div class="lab">
-    <svg viewBox="0 0 320 210" id="bowl" aria-label="ถาดผสมสี">
-      <defs><clipPath id="bowlClip"><path d="M30 80 Q30 196 160 196 Q290 196 290 80Z"/></clipPath></defs>
-      <ellipse cx="160" cy="200" rx="120" ry="8" fill="#000" opacity=".08"/>
-      <path d="M30 80 Q30 196 160 196 Q290 196 290 80Z" fill="#f6f1ea"/>
-      <g clip-path="url(#bowlClip)"><g id="liquidG"><rect id="liquid" x="20" y="200" width="280" height="140" fill="#fff"/><ellipse id="liqTop" cx="160" cy="200" rx="128" ry="12" fill="#fff"/></g></g>
-      <path d="M30 80 Q30 196 160 196 Q290 196 290 80" fill="none" stroke="#5b4636" stroke-width="5" stroke-linecap="round"/>
-      <ellipse cx="160" cy="80" rx="130" ry="18" fill="none" stroke="#5b4636" stroke-width="5"/>
-      <path d="M60 110 Q66 150 96 170" stroke="#fff" stroke-width="8" stroke-linecap="round" fill="none" opacity=".7"/>
-    </svg>
+  <div class="lab"><img class="mascot" src="img/c-mascot.png" alt="คุณนกฮูกนักวิทยาศาสตร์">
+    <div class="bowl" id="bowl"><img src="img/c-bowl.png" alt="ถาดผสมสี"><div class="liq" id="liq"></div><div class="liq2" id="liq2"></div></div>
     <div class="result" id="result">แตะขวดสี แล้วโยนลงถาดเลย!</div>
     <div class="recipe" id="recipe"></div>
   </div>
@@ -108,13 +112,12 @@ const GOALS=[
 const GOALC={ส้ม:'#ff8a1f',เขียว:'#3aa84e',ม่วง:'#8a3fb0',ชมพู:'#f59ab8',ฟ้า:'#8cc4ef',เทา:'#9a9aa2',น้ำตาล:'#8a5a2b'};
 let gi=0;
 
-function renderJars(){$('jars').innerHTML=JARS.map(j=>`<button class="jar" type="button" data-k="${j.k}" aria-label="สี${j.n}"><span class="p" style="background:${j.c}"></span>${j.n}</button>`).join('')}
+function renderJars(){$('jars').innerHTML=JARS.map(j=>`<button class="jar" type="button" data-k="${j.k}" aria-label="สี${j.n}"><img src="img/c-jar${JARS.indexOf(j)+1}.png" alt=""><span class="p" style="background:${j.c}"></span>${j.n}</button>`).join('')}
 function update(anim){
   const c=mixColor(),tot=Object.values(cnt).reduce((a,b)=>a+b,0);
-  const lvl=tot?Math.min(80,22+tot*9):0, y=196-lvl;
-  $('liquid').setAttribute('y',y);$('liquid').setAttribute('fill',c||'#fff');
-  $('liqTop').setAttribute('cy',y);$('liqTop').setAttribute('fill',c||'#fff');
-  if(anim){const g=$('liquidG');g.classList.remove('ripple');void g.getBBox();g.classList.add('ripple')}
+  const sz=tot?Math.min(74,34+tot*8):0, L=$('liq'),L2=$('liq2');
+  L.style.width=L.style.height=L2.style.width=L2.style.height=sz+'%';L.style.background=c||'transparent';
+  if(anim){L.classList.remove('rip');void L.offsetWidth;L.classList.add('rip')}
   const nm=mixName();
   const used=JARS.filter(j=>cnt[j.k]).map(j=>j.n);
   $('result').innerHTML=tot?`ได้สี <b style="color:${c==='#ffffff'?'#9a8574':c}">${nm}</b>`:'แตะขวดสี แล้วโยนลงถาดเลย!';
@@ -126,9 +129,9 @@ function addColor(k,btn){
   // flying drop
   const r=btn.getBoundingClientRect(),b=$('bowl').getBoundingClientRect();
   const d=document.createElement('div');d.className='drop';d.style.background=j.c;d.style.border=k==='w'?'2px solid #ddd':'';d.style.left=(r.left+r.width/2-13)+'px';d.style.top=(r.top)+'px';document.body.appendChild(d);
-  requestAnimationFrame(()=>{d.style.transform=`translate(${b.left+b.width/2-(r.left+r.width/2)}px,${b.top+b.height*.45-r.top}px) scale(.7)`;d.style.opacity='.2'});
+  requestAnimationFrame(()=>{d.style.transform=`translate(${b.left+b.width/2-(r.left+r.width/2)}px,${b.top+b.height*.5-r.top}px) scale(.7)`;d.style.opacity='.2'});
   setTimeout(()=>{d.remove();plop();const {nm,used}=update(true);
-    if(used.length>1)say(used.join(' กับ ')+' ได้สี'+nm);else say('สี'+j.n);
+    if(used.length>1)say('ว้าว '+used.join(' ผสมกับ ')+' กลายเป็น สี'+nm+' จ้ะ');else say('ใส่สี'+j.n+' ลงไปแล้ว ต่อไปจะใส่สีอะไรดีนะ');
     if(mode==='quiz')check(nm)},560);
 }
 function check(nm){
@@ -149,7 +152,7 @@ function cheer(e){const c=document.createElement('div');c.className='cheer';c.te
 
 let ac;function tone(fs,d,type){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();fs.forEach((f,i)=>{const o=ac.createOscillator(),g=ac.createGain(),t=ac.currentTime+i*.1;o.type=type||'sine';o.frequency.value=f;g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.14,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g).connect(ac.destination);o.start(t);o.stop(t+d+.05)})}catch(e){}}
 const plop=()=>tone([420,280],.12);
-let utt;function say(t){lastSpeech=t;try{const s=speechSynthesis;s.cancel();utt=new SpeechSynthesisUtterance(t);const v=s.getVoices().filter(v=>/^th/i.test(v.lang)).sort((a,b)=>(/kanya|premwadee|female|google/i.test(b.name)?1:0)-(/kanya|premwadee|female|google/i.test(a.name)?1:0))[0];if(v)utt.voice=v;utt.lang='th-TH';utt.rate=.85;utt.pitch=1.12;s.speak(utt)}catch(e){}}
+function say(t){lastSpeech=t;try{Voice.say(t)}catch(e){}}
 renderJars();update(false);
 </script>
 </body></html>

@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ฮีโร่ช่วยลูกแมว</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mali:wght@600;700&display=swap">
+<style>
+/* Layout: one tall painted sky board; hero bottom-left, kitten on a rooftop; kid drags a magic rope star-to-star around hazards */
+:root{--cream:#fff7ee;--ink:#5b4636;--soft:#9a8574;--berry:#f2768c;--sun:#ffd166;--mint-d:#4fb784;--sky:#7cc0ef;
+  --shadow:0 6px 0 rgba(91,70,54,.13);--font:'Mali','Sarabun','Noto Sans Thai',system-ui,sans-serif;color-scheme:light}
+[hidden]{display:none!important}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{font-family:var(--font);color:var(--ink);font-weight:600;overflow:hidden;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;
+  background:radial-gradient(40vmax 30vmax at 0% 0%,#d9ecfb,transparent 70%),radial-gradient(40vmax 30vmax at 100% 100%,#ffe3d2,transparent 70%),var(--cream)}
+button{font-family:inherit;color:inherit;font-weight:700;border:0;cursor:pointer}
+button:focus-visible,a:focus-visible{outline:4px solid var(--sky);outline-offset:3px}
+.app{height:100%;display:flex;flex-direction:column;gap:8px;max-width:520px;margin:0 auto;padding:max(10px,env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) max(10px,env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px))}
+.top{display:flex;align-items:center;gap:10px}
+.round{width:50px;height:50px;border-radius:50%;background:#fff;box-shadow:var(--shadow);font-size:24px;display:grid;place-items:center;flex:none;text-decoration:none;color:var(--ink)}
+.round.hint{background:var(--sun)}
+.top .t{flex:1;text-align:center;font-size:19px;line-height:1.2}
+.top .t small{display:block;font-size:13px;color:var(--soft)}
+.dots{display:flex;gap:4px;justify-content:center;margin-top:3px}
+.dots i{width:9px;height:9px;border-radius:50%;background:#efe4d6}
+.dots i.done{background:var(--mint-d)}.dots i.now{background:var(--berry)}
+.bubble{display:flex;gap:10px;align-items:center;background:#fff;border-radius:22px;padding:8px 12px 8px 8px;box-shadow:var(--shadow);font-size:clamp(16px,4.6vw,19px);line-height:1.3}
+.spk{width:46px;height:46px;border-radius:50%;background:var(--berry);color:#fff;font-size:22px;flex:none;display:grid;place-items:center}
+.spk.on{animation:pulse 1s ease-in-out infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 8px rgba(242,118,140,.25)}}
+.boardWrap{flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
+.board{position:relative;height:100%;max-width:100%;aspect-ratio:9/14;border-radius:28px;overflow:hidden;border:4px solid #fff;box-shadow:var(--shadow);
+  background:#bfe4ff;touch-action:none;isolation:isolate}
+.board::before{content:'';position:absolute;inset:-8px;background:url(img/r-bg.jpg) center/cover;filter:blur(2.5px) saturate(.75) brightness(1.06);opacity:.85;z-index:-1}
+.ring{position:absolute;width:15%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.95) 30%,rgba(255,236,150,.6) 60%,transparent 72%);pointer-events:none;z-index:2;animation:glow 1.6s ease-in-out infinite}
+@keyframes glow{50%{transform:translate(-50%,-50%) scale(1.15)}}
+.board img{position:absolute;transform:translate(-50%,-50%);pointer-events:none;-webkit-user-drag:none}
+.house{transform:translate(-50%,0)!important;width:27%;z-index:0}
+.kitten{width:16%;z-index:3;animation:shake 2.2s ease-in-out infinite}
+@keyframes shake{0%,80%,100%{rotate:0deg}85%{rotate:-6deg}90%{rotate:6deg}95%{rotate:-4deg}}
+.hero{width:20%;z-index:5;transition:left .5s ease-in-out,top .5s ease-in-out}
+.star{width:11%;z-index:3;filter:drop-shadow(0 0 8px rgba(255,214,90,.9))}
+.star.used{filter:drop-shadow(0 0 14px #fff36b) brightness(1.15)}
+.haz{width:var(--w,17%);z-index:3}
+.haz.bee,.haz.bird{animation:hover 1.6s ease-in-out infinite}
+@keyframes hover{50%{margin-top:-6px}}
+.haz.hit{animation:hit .4s 3}
+@keyframes hit{50%{filter:drop-shadow(0 0 12px #ff4a4a)}}
+svg.rope{position:absolute;inset:0;z-index:4;width:100%;height:100%;pointer-events:none}
+.go{z-index:6;position:absolute;inset:auto 10px 10px 10px;background:rgba(255,255,255,.9);border-radius:999px;padding:5px 12px;font-size:14px;text-align:center;pointer-events:none}
+.win{position:fixed;inset:0;background:rgba(91,70,54,.45);display:grid;place-items:center;padding:16px;z-index:20}
+.win .card{background:#fff;border-radius:32px;border:5px solid var(--sun);padding:20px 18px;width:min(100%,360px);text-align:center;display:flex;flex-direction:column;gap:10px;animation:pop .45s}
+.win h3{margin:0;font-size:28px;color:var(--berry)}
+.win .stars{font-size:44px;letter-spacing:6px;color:#f0e7dc}.win .stars .on{color:var(--sun)}
+.win .row{display:flex;gap:10px}
+.win .next{flex:1;background:var(--mint-d);color:#fff;border-radius:999px;font-size:24px;padding:12px;box-shadow:0 6px 0 #3a9a6b}
+.win .home{width:58px;height:58px;border-radius:50%;background:var(--cream);font-size:26px;flex:none;text-decoration:none;display:grid;place-items:center;color:var(--ink)}
+@keyframes pop{0%{transform:scale(.6)}60%{transform:scale(1.08)}100%{transform:scale(1)}}
+.conf{position:fixed;top:-40px;font-size:28px;pointer-events:none;z-index:30;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<script src="voice.js"></script>
+</head><body>
+<div class="app">
+  <div class="top">
+    <a class="round" href="index.html" aria-label="กลับไปหน้ารวมเกม">🏠</a>
+    <div class="t">ด่าน <span id="lvNo">1</span><small>ฮีโร่ช่วยลูกแมว</small><div class="dots" id="dots"></div></div>
+    <button class="round hint" id="hintBtn" type="button" aria-label="ขอคำใบ้">💡</button>
+  </div>
+  <div class="bubble"><button class="spk" id="sayBtn" type="button" aria-label="ฟังอีกครั้ง">🔊</button><span id="msg">ลากนิ้วจากฮีโร่ ผ่านดาว ไปหาลูกแมวนะ</span></div>
+  <div class="boardWrap"><div class="board" id="board"><svg class="rope" id="rope" viewBox="0 0 100 100" preserveAspectRatio="none"></svg><span class="go">👆 แตะฮีโร่ แล้วลากผ่านดาว ⭐ ไปหาลูกแมว</span></div></div>
+</div>
+<div class="win" id="win" hidden><div class="card"><div style="font-size:60px">🐱💖</div><h3 id="winT">ช่วยได้แล้ว!</h3><div class="stars" id="winStars"></div><div id="winMsg"></div>
+  <div class="row"><a class="home" href="index.html" aria-label="กลับหน้ารวมเกม">🏠</a><button class="next" id="nextBtn" type="button">ด่านต่อไป ▶</button></div></div></div>
+<script>
+/* Board space: x 0..100 across, y 0..100 down (board is 9:14). ROPE = longest single swing. */
+const ROPE=52, SNAP=8;
+const HZ={cloud:{img:'img/r-cloud.png',r:10,w:'22%',say:'เมฆฟ้าผ่า'},bee:{img:'img/r-bee.png',r:7,w:'14%',say:'ผึ้ง'},bird:{img:'img/r-bird.png',r:7,w:'15%',say:'นกขี้หงุดหงิด'}};
+const LEVELS=[
+ {k:[72,34],s:[[42,60]],h:[]},
+ {k:[80,26],s:[[38,62],[62,44]],h:[[22,40,'bird']]},
+ {k:[78,28],s:[[30,58],[70,62],[52,38]],h:[[56,58,'cloud']]},
+ {k:[22,24],s:[[40,62],[62,44],[40,30]],h:[[20,58,'bee'],[78,30,'bird']]},
+ {k:[80,22],s:[[24,58],[50,64],[46,36],[74,50]],h:[[36,48,'cloud'],[66,30,'bee']]},
+ {k:[50,18],s:[[22,60],[48,60],[74,58],[30,34],[70,34]],h:[[38,46,'cloud'],[50,36,'bee']]},
+ {k:[82,20],s:[[30,62],[60,66],[22,38],[56,40],[80,48]],h:[[44,52,'cloud'],[66,24,'bird'],[40,28,'bee']]},
+ {k:[18,20],s:[[44,64],[74,56],[56,36],[30,44],[76,32]],h:[[24,60,'cloud'],[40,26,'bird'],[60,52,'bee']]},
+ {k:[80,18],s:[[26,62],[52,68],[78,62],[40,44],[66,40],[50,22]],h:[[38,56,'bee'],[64,54,'cloud'],[78,40,'bird'],[30,30,'cloud']]},
+ {k:[50,14],s:[[20,62],[46,66],[74,62],[28,40],[52,44],[78,38],[34,22]],h:[[34,54,'cloud'],[62,54,'bee'],[66,26,'cloud'],[44,32,'bird']]},
+];
+const HERO=[14,86];
+const $=id=>document.getElementById(id);
+const store={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+let best=store.get('rescue-stars',{}),lv=Math.min(store.get('rescue-level',0),LEVELS.length-1),path=[],drawing=false,fails=0,busy=false;
+const heroImg=()=>`img/h-base${(store.get('hero-state',{base:5}).base||0)+1}.png`;
+
+/* geometry */
+const dist=(a,b)=>Math.hypot(a[0]-b[0],(a[1]-b[1])*1.556); // board is taller than wide: scale y to real proportion
+function segHits(a,b,c,r){const ax=a[0],ay=a[1]*1.556,bx=b[0],by=b[1]*1.556,cx=c[0],cy=c[1]*1.556;const dx=bx-ax,dy=by-ay,L=dx*dx+dy*dy;let t=L?((cx-ax)*dx+(cy-ay)*dy)/L:0;t=Math.max(0,Math.min(1,t));return Math.hypot(ax+t*dx-cx,ay+t*dy-cy)<r}
+function toBoard(e){const r=$('board').getBoundingClientRect();return [(e.clientX-r.left)/r.width*100,(e.clientY-r.top)/r.height*100]}
+
+function build(){
+  const L=LEVELS[lv],b=$('board');
+  b.querySelectorAll('img,.ring').forEach(n=>n.remove());
+  const add=(src,cls,x,y,extra='')=>{const i=document.createElement('img');i.src=src;i.className=cls;i.style.left=x+'%';i.style.top=y+'%';if(extra)i.setAttribute('style',i.getAttribute('style')+extra);i.alt='';b.appendChild(i);return i};
+  add('img/r-house.png','house',L.k[0],L.k[1]+4);
+  add('img/r-kitten.png','kitten',L.k[0],L.k[1]);
+  L.h.forEach(([x,y,t],i)=>{const n=add(HZ[t].img,'haz '+t,x,y,`;--w:${HZ[t].w}`);n.dataset.h=i});
+  L.s.forEach(([x,y],i)=>{const r=document.createElement('span');r.className='ring';r.style.left=x+'%';r.style.top=y+'%';b.appendChild(r);const n=add('img/r-star.png','star',x,y);n.dataset.s=i});
+  const h=add(heroImg(),'hero',HERO[0],HERO[1]);h.id='heroImg';
+  $('lvNo').textContent=lv+1;
+  $('dots').innerHTML=LEVELS.map((_,i)=>`<i class="${best[i]?'done':''}${i===lv?' now':''}"></i>`).join('');
+  path=[HERO.slice()];fails=0;drawRope();
+}
+function drawRope(tip){
+  let d=path.map((p,i)=>(i?'L':'M')+p[0]+' '+p[1]).join(' ');
+  let s=`<path d="${d}" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" style="stroke-width:9px"/><path d="${d}" fill="none" stroke="#f2768c" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" style="stroke-width:5px"/>`;
+  if(tip&&path.length){const l=path[path.length-1];s+=`<path d="M${l[0]} ${l[1]} L${tip[0]} ${tip[1]}" stroke="#f2768c" stroke-dasharray="2 2" fill="none" vector-effect="non-scaling-stroke" style="stroke-width:4px;stroke-dasharray:8 8"/>`}
+  $('rope').innerHTML=s;
+  document.querySelectorAll('.star').forEach(n=>n.classList.toggle('used',path.some(p=>p.s===+n.dataset.s)));
+}
+/* try to extend the rope to point p (a star or the kitten) */
+function tryAdd(p,label){
+  const L=LEVELS[lv],last=path[path.length-1];
+  if(dist(last,p)>ROPE){fail('far');return false}
+  for(let i=0;i<L.h.length;i++){const [x,y,t]=L.h[i];if(segHits(last,p,[x,y],HZ[t].r)){fail('haz',i);return false}}
+  path.push(p);tone([620+path.length*60],.12,'triangle');drawRope();return true;
+}
+function fail(kind,i){
+  drawing=false;fails++;tone([300,220],.25);
+  if(kind==='far')say('โอ๊ะ เชือกยาวไม่ถึงจ้ะ ลองเกาะดาวดวงที่ใกล้กว่านะ');
+  else{const t=LEVELS[lv].h[i][2];const n=document.querySelector(`.haz[data-h="${i}"]`);n.classList.remove('hit');void n.offsetWidth;n.classList.add('hit');
+    say('ระวัง ทางนั้นมี'+HZ[t].say+' ไม่ปลอดภัยนะ ลองเลือกทางใหม่จ้ะ')}
+  setTimeout(()=>{path=[HERO.slice()];drawRope()},500);
+}
+$('board').addEventListener('pointerdown',e=>{
+  if(busy)return;const p=toBoard(e);
+  if(dist(p,path[path.length-1])<SNAP*1.6){drawing=true;$('board').setPointerCapture(e.pointerId);return}
+  // tapping a star or the kitten also works (for little fingers)
+  checkHit(p,true);
+});
+$('board').addEventListener('pointermove',e=>{if(!drawing||busy)return;const p=toBoard(e);drawRope(p);checkHit(p,false)});
+$('board').addEventListener('pointerup',()=>{if(drawing){drawing=false;drawRope()}});
+function checkHit(p,tap){
+  const L=LEVELS[lv];
+  if(dist(p,L.k)<SNAP*1.3){if(tryAdd(L.k.slice()))rescue();return}
+  L.s.forEach(([x,y],i)=>{if(path.some(q=>q.s===i))return;if(dist(p,[x,y])<SNAP){const q=[x,y];q.s=i;tryAdd(q)}});
+}
+function rescue(){
+  busy=true;drawing=false;const h=$('heroImg');let i=1;
+  say('เย้ ฮีโร่เหวี่ยงเชือกไปช่วยลูกแมวแล้ว');
+  const step=()=>{if(i>=path.length){done();return}const p=path[i++];h.style.left=p[0]+'%';h.style.top=p[1]+'%';tone([520+i*80],.15,'triangle');setTimeout(step,520)};step();
+}
+function done(){
+  const s=fails===0?3:fails<3?2:1;best[lv]=Math.max(best[lv]||0,s);store.set('rescue-stars',best);
+  confetti();tone([523,659,784,1047],.3,'triangle');
+  $('winStars').innerHTML=[0,1,2].map(k=>`<span class="${k<s?'on':''}">★</span>`).join('');
+  const last=lv>=LEVELS.length-1;
+  $('winT').textContent=last?'ฮีโร่ตัวจริง!':'ช่วยได้แล้ว!';
+  $('winMsg').textContent=last?'หนูช่วยลูกแมวครบทุกด่านแล้ว เก่งมาก':'เลือกทางที่ปลอดภัย เก่งมากเลย';
+  $('nextBtn').textContent=last?'เล่นใหม่ ↻':'ด่านต่อไป ▶';
+  setTimeout(()=>{$('win').hidden=false;say(last?'เก่งที่สุดเลย หนูเป็นฮีโร่ตัวจริง ช่วยลูกแมวได้ครบทุกด่าน':'เมี้ยว ขอบคุณนะฮีโร่ หนูเลือกทางที่ปลอดภัย เก่งมากเลยจ้ะ')},500);
+}
+$('nextBtn').onclick=()=>{$('win').hidden=true;busy=false;lv=lv>=LEVELS.length-1?0:lv+1;store.set('rescue-level',lv);build();intro()};
+function intro(){const L=LEVELS[lv];
+  say(lv===0?'ช่วยด้วย ลูกแมวติดอยู่บนหลังคา ลากนิ้วจากฮีโร่ ไปเกาะดาว แล้วไปหาลูกแมวนะจ๊ะ':('ด่านที่ '+(lv+1)+' ลูกแมวติดอยู่อีกแล้ว'+(L.h.length?' ระวังสิ่งที่อันตรายด้วยนะ':'')+' ลองคิดดูซิ ทางไหนปลอดภัย'))}
+$('sayBtn').onclick=()=>intro();
+$('hintBtn').onclick=()=>{
+  const sol=solve(lv);if(!sol){say('ลองเกาะดาวที่อยู่ใกล้ ๆ ก่อนนะ');return}
+  const next=sol[Math.min(path.length,sol.length-1)];const n=next==='k'?document.querySelector('.kitten'):document.querySelector(`.star[data-s="${next}"]`);
+  n.animate([{transform:'translate(-50%,-50%) scale(1)'},{transform:'translate(-50%,-50%) scale(1.5)'},{transform:'translate(-50%,-50%) scale(1)'}],{duration:600,iterations:3});
+  say(next==='k'?'ไปหาลูกแมวได้เลยจ้ะ':'ลองเกาะดาวดวงที่กระพริบนะ');
+};
+/* breadth-first search for a safe route (used by the hint and to check every level is solvable) */
+function solve(i){
+  const L=LEVELS[i],pts=L.s.map(p=>p.slice());const safe=(a,b)=>dist(a,b)<=ROPE&&!L.h.some(([x,y,t])=>segHits(a,b,[x,y],HZ[t].r));
+  const q=[[HERO,[]]],seen=new Set();
+  while(q.length){const [at,route]=q.shift();if(safe(at,L.k))return [...route,'k'];
+    pts.forEach((p,j)=>{if(seen.has(j)||route.includes(j))return;if(safe(at,p)){seen.add(j);q.push([p,[...route,j]])}})}
+  return null;
+}
+window.__solve=solve;window.__LEVELS=LEVELS;
+let ac;function tone(fs,d,type){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();fs.forEach((f,i)=>{const o=ac.createOscillator(),g=ac.createGain(),t=ac.currentTime+i*.1;o.type=type||'sine';o.frequency.value=f;g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.13,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g).connect(ac.destination);o.start(t);o.stop(t+d+.05)})}catch(e){}}
+function say(t){$('msg').textContent=t.replace(/ จ้ะ| จ๊ะ/g,'');try{Voice.say(t)}catch(e){}}
+Voice.onstart=()=>$('sayBtn').classList.add('on');Voice.onend=()=>$('sayBtn').classList.remove('on');
+function confetti(){const set=['⭐','💖','🐾','✨'];for(let i=0;i<20;i++){const s=document.createElement('span');s.className='conf';s.textContent=set[i%4];s.style.left=Math.random()*100+'vw';s.style.animationDuration=(1.8+Math.random()*1.4)+'s';document.body.appendChild(s);setTimeout(()=>s.remove(),3600)}}
+build();
+document.addEventListener('pointerdown',function once(){document.removeEventListener('pointerdown',once,true);intro()},true);
+</script>
+</body></html>

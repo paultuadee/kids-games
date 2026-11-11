@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>คนเก่ง</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mali:wght@600;700&display=swap">
+<style>
+/* Layout: a soft watercolor picture-book for pre-readers — huge rounded buttons, pictures instead of words, every screen talks */
+:root{
+  --cream:#fff7ee; --blob1:#ffe3d2; --blob2:#dff3e8; --blob3:#e9e0fb; --blob4:#d9ecfb;
+  --ink:#5b4636; --soft:#9a8574; --card:#ffffff; --edge:#f1e2d2;
+  --berry:#f2768c; --berry-d:#d95a72; --sun:#ffd166; --mint:#7fd3a8; --mint-d:#4fb784; --lav:#b79ce8; --lav-d:#8f6fd0; --sky:#7cc0ef;
+  --font:'Mali','Sarabun','Noto Sans Thai',system-ui,sans-serif;
+  --shadow:0 6px 0 rgba(91,70,54,.13);
+  color-scheme:light;
+}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0;overflow:hidden;font-family:var(--font);color:var(--ink);font-weight:600;
+  background:
+    radial-gradient(40vmax 30vmax at 0% 0%,var(--blob1),transparent 70%),
+    radial-gradient(35vmax 30vmax at 100% 10%,var(--blob4),transparent 70%),
+    radial-gradient(45vmax 35vmax at 100% 100%,var(--blob2),transparent 70%),
+    radial-gradient(35vmax 30vmax at 0% 90%,var(--blob3),transparent 70%),
+    var(--cream);
+  -webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+button,select{font-family:inherit;color:inherit;font-weight:700}
+button{cursor:pointer;border:0}
+button:focus-visible,select:focus-visible,summary:focus-visible{outline:4px solid var(--sky);outline-offset:3px}
+.screen{height:100%;overflow-y:auto;padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));box-sizing:border-box}
+.wrap{max-width:540px;margin:0 auto;padding-block:14px 36px;display:flex;flex-direction:column;gap:16px}
+.press{transition:transform .12s}
+.press:active{transform:scale(.95)}
+
+/* ---------- home ---------- */
+.hero{position:relative;background:var(--card);border-radius:32px;box-shadow:var(--shadow);overflow:hidden;border:4px solid #fff}
+.hero img{display:block;width:100%;aspect-ratio:16/8.5;object-fit:cover;object-position:center 35%}
+.hero .title{position:absolute;left:0;right:0;bottom:0;padding:26px 16px 12px;background:linear-gradient(transparent,rgba(255,255,255,.95) 45%);display:flex;align-items:flex-end;justify-content:space-between;gap:8px}
+.hero h1{margin:0;font-size:clamp(32px,10vw,46px);line-height:1;color:var(--berry);text-shadow:3px 3px 0 #fff, 4px 4px 0 var(--sun)}
+.starpill{background:var(--sun);border-radius:999px;padding:6px 14px;font-size:20px;box-shadow:0 3px 0 rgba(91,70,54,.18);white-space:nowrap;font-variant-numeric:tabular-nums}
+.levels{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.lvl{border-radius:28px;padding:12px 8px 14px;display:flex;flex-direction:column;align-items:center;gap:4px;box-shadow:var(--shadow);border:4px solid transparent;position:relative}
+.lvl .ic{font-size:44px;line-height:1.1}
+.lvl .t{font-size:20px;line-height:1.1}
+.lvl .s{font-size:13px;color:var(--soft)}
+.lvl.l1{background:#e7f7ef}
+.lvl.l2{background:#f0e9fd}
+.lvl[aria-pressed="true"].l1{border-color:var(--mint-d)}
+.lvl[aria-pressed="true"].l2{border-color:var(--lav-d)}
+.lvl[aria-pressed="true"]::after{content:"✓";position:absolute;right:10px;top:8px;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:16px}
+.lvl.l1[aria-pressed="true"]::after{background:var(--mint-d)}
+.lvl.l2[aria-pressed="true"]::after{background:var(--lav-d)}
+.play{background:var(--berry);color:#fff;border-radius:999px;font-size:clamp(28px,9vw,38px);padding:16px 10px;box-shadow:0 8px 0 var(--berry-d);display:flex;align-items:center;justify-content:center;gap:12px;animation:bob 2s ease-in-out infinite}
+.play:active{transform:translateY(5px);box-shadow:0 3px 0 var(--berry-d)}
+.play .tri{display:inline-grid;place-items:center;width:52px;height:52px;border-radius:50%;background:#fff;color:var(--berry);font-size:26px;padding-left:4px;box-sizing:border-box}
+@keyframes bob{50%{transform:translateY(-3px)}}
+.book{display:flex;flex-direction:column;gap:10px}
+.book h2{margin:0;font-size:18px;display:flex;align-items:center;gap:8px;color:var(--soft)}
+.book h2 b{background:#fff;color:var(--ink);border-radius:999px;padding:3px 12px;box-shadow:0 3px 0 rgba(91,70,54,.1)}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.tile{position:relative;background:#fff;border-radius:22px;padding:5px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:3px}
+.tile img{display:block;width:100%;aspect-ratio:1;object-fit:cover;border-radius:17px}
+.tile .num{position:absolute;left:-4px;top:-6px;width:34px;height:34px;border-radius:50%;background:var(--sun);display:grid;place-items:center;font-size:17px;box-shadow:0 2px 0 rgba(91,70,54,.2);font-variant-numeric:tabular-nums}
+.tile .st{text-align:center;font-size:16px;letter-spacing:2px;color:var(--sun);line-height:1.1;-webkit-text-stroke:.5px #e0a92f}
+.tile .st .off{color:#efe6dc;-webkit-text-stroke:0}
+.tile.locked img{filter:grayscale(1) blur(2px);opacity:.45}
+.tile.locked::after{content:"🔒";position:absolute;inset:5px 5px auto 5px;aspect-ratio:1;display:grid;place-items:center;font-size:34px}
+.tile.now{box-shadow:0 0 0 5px var(--berry),var(--shadow);animation:bob 1.6s ease-in-out infinite}
+.tile.soon{background:rgba(255,255,255,.5);box-shadow:none;border:3px dashed var(--edge)}
+.tile.soon .ph{aspect-ratio:1;display:grid;place-items:center;font-size:30px;opacity:.5}
+.prog{background:#fff;border-radius:24px;padding:12px 16px 14px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:8px}
+.prog .pt{font-size:18px;text-align:center}
+.pbar{height:16px;border-radius:999px;background:#f3e9de;overflow:hidden}
+.pbar span{display:block;height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,var(--mint),var(--sky));transition:width .4s}
+.hub{align-self:flex-start;background:#fff;border-radius:999px;padding:8px 16px;font-size:16px;color:var(--ink);text-decoration:none;box-shadow:var(--shadow)}
+.trophy{background:var(--sun);border-radius:24px;padding:14px;font-size:20px;text-align:center;box-shadow:var(--shadow)}
+.parent{background:rgba(255,255,255,.7);border-radius:20px;padding:10px 14px;font-size:14px;color:var(--soft)}
+.parent summary{cursor:pointer;font-weight:700}
+.parent .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}
+.parent select{flex:1;min-width:0;font-size:15px;padding:8px;border:2px solid var(--edge);border-radius:12px;background:#fff;color:var(--ink)}
+.parent p{margin:8px 0 0}
+.chip{background:#fff;border-radius:999px;padding:8px 14px;box-shadow:0 3px 0 rgba(91,70,54,.12);font-size:15px}
+
+/* ---------- case ---------- */
+.top{display:flex;align-items:center;gap:10px}
+.round{width:54px;height:54px;border-radius:50%;background:#fff;box-shadow:var(--shadow);font-size:26px;display:grid;place-items:center;flex:none}
+.round.hint{background:var(--sun)}
+.top .where{flex:1;min-width:0;text-align:center;font-size:20px}
+.top .where small{display:block;font-size:13px;color:var(--soft)}
+.lv2tag{display:inline-block;background:var(--lav);color:#fff;border-radius:999px;font-size:12px;padding:1px 9px;vertical-align:middle;margin-left:4px}
+.bubble{display:flex;gap:12px;align-items:center;background:#fff;border-radius:26px;padding:10px 14px 10px 10px;box-shadow:var(--shadow);position:relative}
+.bubble::after{content:"";position:absolute;left:34px;bottom:-12px;border:12px solid transparent;border-top-color:#fff;border-bottom:0}
+.spk{width:60px;height:60px;border-radius:50%;background:var(--berry);color:#fff;font-size:28px;display:grid;place-items:center;flex:none;box-shadow:0 4px 0 var(--berry-d)}
+.spk.on{animation:pulse 1s ease-in-out infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 10px rgba(242,118,140,.25),0 4px 0 var(--berry-d)}}
+.bubble p{margin:0;font-size:clamp(19px,5.6vw,24px);line-height:1.35;text-wrap:balance}
+.scene{position:relative;border-radius:28px;overflow:hidden;box-shadow:var(--shadow);border:4px solid #fff;line-height:0;cursor:zoom-in;background:#f4ead8}
+.scene img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover}
+.zoomtip{position:absolute;right:10px;bottom:10px;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.92);display:grid;place-items:center;font-size:22px;line-height:1;pointer-events:none}
+.ringx{position:absolute;border:6px solid #ffc400;border-radius:50%;opacity:0;pointer-events:none;transform:translate(-50%,-50%);box-shadow:0 0 0 3px rgba(255,255,255,.8),0 0 20px #ffc400}
+.ringx.on{animation:ring .9s ease-in-out 4}
+@keyframes ring{50%{opacity:1}}
+.pick{display:flex;align-items:center;justify-content:center;gap:8px;font-size:18px;color:var(--soft);margin-bottom:-6px}
+.pick b{color:var(--ink)}
+.lineup{position:relative;background:#fff;border-radius:28px;box-shadow:var(--shadow);overflow:hidden;line-height:0;border:4px solid #fff}
+.lineup>img{display:block;width:100%;height:auto}
+.lineup .hits{bottom:34px}
+.hits{position:absolute;inset:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+.sus{background:none;padding:0;border-radius:18px;margin:4px 2px}
+.sus.yes{background:rgba(127,211,168,.22);box-shadow:inset 0 0 0 5px var(--mint-d)}
+.sus.no{background:rgba(242,118,140,.15);animation:wob .4s}
+.names{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));text-align:center;font-size:16px;line-height:1.4;padding:0 0 10px}
+.why{margin:0;background:#e9f8f0;border-radius:22px;padding:12px 14px;font-size:18px;color:#2f7d58;text-align:center;box-shadow:var(--shadow)}
+.l2{background:#f3edff;border-radius:28px;padding:14px;display:flex;flex-direction:column;gap:12px;box-shadow:var(--shadow)}
+.l2 .bubble{background:#fff}
+.opts{display:flex;flex-direction:column;gap:10px}
+.optrow{display:flex;gap:8px;align-items:stretch}
+.opt{flex:1;min-width:0;background:#fff;border-radius:22px;font-size:clamp(17px,5vw,20px);padding:12px 14px;text-align:left;box-shadow:0 5px 0 rgba(143,111,208,.35);line-height:1.35;display:flex;align-items:center;gap:10px}
+.opt .em{font-size:34px;line-height:1;flex:none}
+.opt:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(143,111,208,.35)}
+.opt.no{background:#ffe6ea;animation:wob .4s}
+.opt.yes{background:#dff5e9;box-shadow:0 5px 0 var(--mint-d)}
+.mini{width:48px;border-radius:18px;background:#fff;box-shadow:0 5px 0 rgba(143,111,208,.35);font-size:20px;flex:none}
+
+/* ---------- overlays ---------- */
+.zoom{position:fixed;inset:0;z-index:25;background:#2c2420;display:flex;flex-direction:column}
+.zoom .zs{flex:1;overflow:auto;-webkit-overflow-scrolling:touch}
+.zoom .zs img{display:block;width:max(200vw,900px);height:auto}
+.zoom .zb{display:flex;justify-content:flex-end;padding:10px max(14px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(14px,env(safe-area-inset-left,0px))}
+.win{position:fixed;inset:0;background:rgba(91,70,54,.45);display:grid;place-items:center;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));z-index:20}
+.win .card{background:#fff;border-radius:34px;box-shadow:0 10px 0 rgba(91,70,54,.2);padding:22px 18px 18px;width:min(100%,370px);text-align:center;display:flex;flex-direction:column;gap:10px;box-sizing:border-box;animation:pop .45s;border:5px solid var(--sun)}
+.win .face{font-size:64px;line-height:1}
+.win h3{margin:0;font-size:30px;color:var(--berry)}
+.win .stars{font-size:46px;letter-spacing:6px;color:#f0e7dc}
+.win .stars .on{color:var(--sun)}
+.win .msg{font-size:18px;line-height:1.4}
+.win .row{display:flex;gap:10px;justify-content:center}
+.win .next{flex:1;background:var(--mint-d);color:#fff;border-radius:999px;font-size:26px;padding:12px;box-shadow:0 6px 0 #3a9a6b}
+.win .home{width:60px;height:60px;border-radius:50%;background:var(--cream);font-size:28px;flex:none;box-shadow:0 4px 0 rgba(91,70,54,.15)}
+.win .bar2{height:8px;border-radius:999px;background:#f0e7dc;overflow:hidden}
+.win .bar2 span{display:block;height:100%;width:0;background:var(--mint)}
+.win.go .bar2 span{width:100%;transition:width 6s linear}
+.conf{position:fixed;top:-40px;font-size:28px;pointer-events:none;z-index:30;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg)}}
+@keyframes pop{0%{transform:scale(.6)}60%{transform:scale(1.08)}100%{transform:scale(1)}}
+@keyframes wob{0%,100%{rotate:0deg}25%{rotate:-5deg}75%{rotate:5deg}}
+.novoice{background:#fff3c4;border-radius:18px;padding:10px 14px;font-size:14px;line-height:1.4}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<script src="voice.js"></script>
+</head><body>
+
+
+<section class="screen" id="home">
+  <div class="wrap">
+    <a class="hub" href="index.html" aria-label="กลับไปหน้ารวมเกม">‹ เกมทั้งหมด</a>
+    <div class="hero">
+      <img src="img/g02.jpg" alt="เพื่อน ๆ คนเก่ง">
+      <div class="title"><h1>คนเก่ง</h1><span class="starpill" id="starsTotal">⭐ 0</span></div>
+    </div>
+    
+    <button class="play" id="startBtn" type="button"><span class="tri">▶</span><span id="startTxt">เล่นเลย</span></button>
+    <div class="prog" id="prog"><div class="pt" id="progTxt"></div><div class="pbar"><span id="progBar"></span></div></div>
+    <div class="trophy" id="trophy" hidden>🏆 ไขครบทุกคดีแล้ว! เก่งที่สุดเลย</div>
+    <div class="novoice" id="novoice" hidden>สำหรับผู้ปกครอง: เครื่องนี้ยังไม่มีเสียงอ่านภาษาไทย จึงอาจไม่ได้ยินเสียงโจทย์ ติดตั้งได้ที่ การตั้งค่า › การช่วยการเข้าถึง › เนื้อหาที่พูด › เสียง › ไทย (iPhone) หรือ การตั้งค่า › ภาษา › ข้อความเป็นเสียงพูด (Android/Windows)</div>
+    <details class="parent">
+      <summary>⚙️ สำหรับผู้ปกครอง</summary>
+      <div class="row">
+        <select id="voiceSel" aria-label="เลือกเสียงอ่าน"></select>
+        <button class="chip press" id="testVoice" type="button">🔊 ลองฟัง</button>
+      </div>
+      <p id="diag" style="color:#b0563f"></p>
+      <p id="voiceNote">ระบบเลือกเสียงผู้หญิงภาษาไทยให้อัตโนมัติ ถ้ามีหลายเสียงเลือกเสียงที่ชอบได้</p>
+      <p>ระดับ 2 จะเปิดทีละข้อ ตามข้อที่ผ่านในระดับ 1 แล้ว</p>
+      <div class="row"><button class="chip press" id="restart" type="button">↻ เริ่มเล่นใหม่ตั้งแต่ข้อ 1</button></div>
+    </details>
+  </div>
+</section>
+
+<section class="screen" id="caseScreen" hidden>
+  <div class="wrap">
+    <div class="top">
+      <button class="round press" id="back" type="button" aria-label="กลับหน้าแรก">🏠</button>
+      <span class="where" id="where"></span>
+      <button class="round hint press" id="hintBtn" type="button" aria-label="ขอคำใบ้">💡</button>
+    </div>
+    <div class="bubble"><button class="spk press" id="sayBtn" type="button" aria-label="ฟังโจทย์อีกครั้ง">🔊</button><p id="q"></p></div>
+        <div class="pick">👇 <b>แตะที่ภาพ</b> เลือกเพื่อน 1 คน</div>
+    <div class="lineup" id="lineup"></div>
+    <p class="why" id="why" hidden></p>
+        </div>
+  </div>
+</section>
+
+<div class="zoom" id="zoom" hidden><div class="zs" id="zs"></div><div class="zb"><button class="round press" id="zclose" type="button" aria-label="ปิดภาพขยาย">✕</button></div></div>
+
+<div class="win" id="win" hidden>
+  <div class="card">
+    <div class="face">🥳</div>
+    <h3 id="winTitle">เก่งมาก!</h3>
+    <div class="stars" id="winStars"></div>
+    <div class="msg" id="winWhy"></div>
+    <div class="bar2" id="winBar"><span></span></div>
+    <div class="row">
+      <button class="home press" id="toHome" type="button" aria-label="กลับหน้าแรก">🏠</button>
+      <button class="next press" id="nextBtn" type="button">ไปต่อ ▶</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const CASES=[{"title": "นั่งรถไปโรงเรียน", "q": "ใครทำไม่ถูกต้อง?", "say": "นั่งรถไปโรงเรียนกันนะ ลองดูซิ ใครทำไม่ถูกต้องเอ่ย", "sus": [{"n": "กระต่าย"}, {"n": "หมี"}, {"n": "ลิง"}, {"n": "แมว"}], "ans": 2, "why": "น้องลิงไม่คาดเข็มขัดนิรภัย แล้วยังยืนบนเบาะ อันตรายมากเลย", "hint": ""}, {"title": "ร้านอาหาร", "q": "ใครทำดี?", "say": "ไปกินข้าวที่ร้านอาหารกัน ใครทำตัวดีที่สุดนะ", "sus": [{"n": "หมา"}, {"n": "หมู"}, {"n": "แมว"}, {"n": "จิ้งจอก"}], "ans": 2, "why": "น้องแมวนั่งกินข้าวเรียบร้อย ไม่วิ่ง ไม่ยืนบนเก้าอี้", "hint": ""}, {"title": "ข้ามถนน", "q": "ใครข้ามถนนถูกต้อง?", "say": "จะข้ามถนนกันแล้ว ใครข้ามถนนถูกต้องนะ", "sus": [{"n": "เป็ด"}, {"n": "หมี"}, {"n": "กระต่าย"}, {"n": "กระรอก"}], "ans": 1, "why": "น้องหมีจับมือผู้ใหญ่ ข้ามทางม้าลาย ตอนไฟเขียว", "hint": ""}, {"title": "ห้องสมุด", "q": "ใครทำดีในห้องสมุด?", "say": "ในห้องสมุดต้องทำตัวยังไงนะ ใครทำดีเอ่ย", "sus": [{"n": "ลิง"}, {"n": "นกฮูก"}, {"n": "หมา"}, {"n": "หมู"}], "ans": 1, "why": "น้องนกฮูกนั่งอ่านหนังสือเงียบ ๆ ไม่ส่งเสียงดัง", "hint": ""}, {"title": "ก่อนกินข้าว", "q": "ใครทำถูกต้อง?", "say": "ก่อนกินข้าว ต้องทำอะไรก่อนนะ ใครทำถูกต้อง", "sus": [{"n": "กระต่าย"}, {"n": "หมี"}, {"n": "แมว"}, {"n": "หมา"}], "ans": 0, "why": "น้องกระต่ายล้างมือด้วยสบู่ก่อนกินข้าว", "hint": ""}, {"title": "เข้าแถว", "q": "ใครทำไม่ถูกต้อง?", "say": "เพื่อน ๆ ต่อแถวซื้อไอศกรีม ใครทำไม่ถูกต้องนะ", "sus": [{"n": "แกะ"}, {"n": "เป็ด"}, {"n": "จิ้งจอก"}, {"n": "แฮมสเตอร์"}], "ans": 2, "why": "น้องจิ้งจอกแซงคิวเพื่อน ต้องต่อแถวรอคิวนะ", "hint": ""}, {"title": "ทิ้งขยะ", "q": "ใครทำดี?", "say": "กินขนมเสร็จแล้ว ใครทิ้งขยะถูกต้องนะ", "sus": [{"n": "หมู"}, {"n": "แมว"}, {"n": "หมา"}, {"n": "หมี"}], "ans": 1, "why": "น้องแมวทิ้งขยะลงถัง สวนจะได้สะอาด", "hint": ""}, {"title": "ไอจาม", "q": "ใครทำถูกต้อง?", "say": "เอ๊ะ จะจามแล้ว ใครทำถูกต้องเวลาจามนะ", "sus": [{"n": "กระต่าย"}, {"n": "หมี"}, {"n": "หมา"}, {"n": "ลิง"}], "ans": 1, "why": "น้องหมีจามใส่ข้อพับแขน เชื้อโรคจะไม่กระเด็นใส่เพื่อน", "hint": ""}, {"title": "สไลเดอร์", "q": "ใครเล่นไม่ปลอดภัย?", "say": "ที่สนามเด็กเล่น ใครเล่นสไลเดอร์ไม่ปลอดภัยนะ", "sus": [{"n": "เป็ด"}, {"n": "แมว"}, {"n": "หมู"}, {"n": "แกะ"}], "ans": 2, "why": "น้องหมูปีนสวนขึ้นสไลเดอร์ อาจชนเพื่อนได้", "hint": ""}, {"title": "ได้รับของขวัญ", "q": "ใครทำดี?", "say": "คุณยายให้ของขวัญ ใครทำดีที่สุดนะ", "sus": [{"n": "หมา"}, {"n": "จิ้งจอก"}, {"n": "แมว"}, {"n": "หมี"}], "ans": 2, "why": "น้องแมวไหว้ขอบคุณคุณยาย", "hint": ""}, {"title": "เจอคุณครู", "q": "ใครทำดี?", "say": "เช้านี้ไปโรงเรียน เจอคุณครูหน้าประตู ใครทำดีนะ", "sus": [{"n": "กระต่าย"}, {"n": "ลิง"}, {"n": "หมู"}, {"n": "จิ้งจอก"}], "ans": 0, "why": "น้องกระต่ายไหว้ทักทายคุณครู", "hint": ""}, {"title": "ก่อนนอน", "q": "ใครทำถูกต้อง?", "say": "ได้เวลาเข้านอนแล้ว ใครทำถูกต้องนะ", "sus": [{"n": "หมี"}, {"n": "หมา"}, {"n": "แมว"}, {"n": "ลิง"}], "ans": 0, "why": "น้องหมีแปรงฟันก่อนนอน ฟันจะได้แข็งแรง", "hint": ""}, {"title": "สระว่ายน้ำ", "q": "ใครทำถูกต้อง?", "say": "ไปเล่นน้ำที่สระกัน ใครทำถูกต้องปลอดภัยนะ", "sus": [{"n": "เป็ด"}, {"n": "แกะ"}, {"n": "หมู"}, {"n": "หมา"}], "ans": 2, "why": "น้องหมูใส่เสื้อชูชีพ และมีผู้ใหญ่อยู่ด้วย", "hint": ""}, {"title": "ปลั๊กไฟ", "q": "ใครทำไม่ถูกต้อง?", "say": "ในบ้านมีปลั๊กไฟ ใครทำไม่ถูกต้อง อันตรายนะ", "sus": [{"n": "กระต่าย"}, {"n": "แมว"}, {"n": "ลิง"}, {"n": "หมี"}], "ans": 2, "why": "น้องลิงเอาส้อมแหย่ปลั๊กไฟ อันตรายมาก ห้ามทำนะ", "hint": ""}, {"title": "แบ่งของเล่น", "q": "ใครทำดี?", "say": "เพื่อนอยากเล่นด้วย ใครทำดีนะ", "sus": [{"n": "จิ้งจอก"}, {"n": "แฮมสเตอร์"}, {"n": "หมา"}, {"n": "หมู"}], "ans": 1, "why": "น้องแฮมสเตอร์แบ่งของเล่นให้เพื่อน", "hint": ""}, {"title": "กินผัก", "q": "ใครทำดี?", "say": "มื้อเย็นมีผักด้วย ใครทำดีนะ", "sus": [{"n": "กระต่าย"}, {"n": "หมี"}, {"n": "หมา"}, {"n": "แมว"}], "ans": 0, "why": "น้องกระต่ายกินผักหมดจาน ร่างกายแข็งแรง", "hint": ""}, {"title": "เก็บของเล่น", "q": "ใครทำดี?", "say": "เล่นเสร็จแล้ว ใครทำดีนะ", "sus": [{"n": "เป็ด"}, {"n": "ลิง"}, {"n": "หมู"}, {"n": "แกะ"}], "ans": 0, "why": "น้องเป็ดเก็บของเล่นเข้ากล่อง", "hint": ""}, {"title": "ในห้องเรียน", "q": "ใครทำไม่ถูกต้อง?", "say": "คุณครูกำลังสอน ใครทำไม่ถูกต้องนะ", "sus": [{"n": "แมว"}, {"n": "หมี"}, {"n": "หมา"}, {"n": "กระต่าย"}], "ans": 2, "why": "น้องหมายืนบนโต๊ะแล้วตะโกน ต้องนั่งฟังคุณครูนะ", "hint": ""}, {"title": "ปั่นจักรยาน", "q": "ใครทำถูกต้อง?", "say": "ไปปั่นจักรยานกัน ใครทำถูกต้องปลอดภัยนะ", "sus": [{"n": "จิ้งจอก"}, {"n": "หมี"}, {"n": "หมู"}, {"n": "ลิง"}], "ans": 1, "why": "น้องหมีใส่หมวกกันน็อก ปั่นอย่างระวัง", "hint": ""}, {"title": "พลัดหลงในห้าง", "q": "ใครทำถูกต้อง?", "say": "ถ้าหลงกับคุณแม่ในห้าง ต้องทำยังไงนะ ใครทำถูกต้อง", "sus": [{"n": "แมว"}, {"n": "หมา"}, {"n": "กระต่าย"}, {"n": "แกะ"}], "ans": 2, "why": "น้องกระต่ายขอความช่วยเหลือจากพี่เจ้าหน้าที่ที่ใส่ชุดเครื่องแบบ", "hint": ""}];
+const AVAIL=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+const RINGS={};
+const BOOK=['บ้านแสนซน','โรงเรียนวุ่นวาย','สวนสนุก','ครัวป่วน','นักสืบชั้นยอด'];
+const BOOKIC=['🏠','🏫','🎡','🍰','🕵️'];
+
+const $=id=>document.getElementById(id);
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const store={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+let best1=store.get('good-stars-v1',{});
+let LV=1;
+let best=best1;
+const saveBest=()=>store.set('good-stars-v1',best1);
+let cur=0,mist=0,done=false,token=0,stage=1;
+const has=i=>i>=0&&i<CASES.length&&AVAIL.includes(i+1);
+const pad=n=>String(n).padStart(2,'0');
+const imgS=i=>`img/g${pad(i+1)}.jpg`, imgF=imgS;
+const NUM=['หนึ่ง','สอง','สาม'];
+
+/* ---------- voice ---------- */
+let voiceOK=false,lastErr='';
+function diag(){if(voiceOK)return;let n=0,th=0;try{const a=speechSynthesis.getVoices();n=a.length;th=a.filter(v=>/^th/i.test(v.lang)).length}catch(e){}
+  const msg=!('speechSynthesis' in window)?'แอป/เบราว์เซอร์นี้ไม่รองรับการอ่านออกเสียง':(n===0?'เครื่องนี้ไม่มีเสียงอ่านเลย':(th===0?'เครื่องนี้ไม่มีเสียงอ่านภาษาไทย':'เสียงอ่านถูกปิดกั้น'+(lastErr?' ('+lastErr+')':'')));
+  $('diag').textContent='ตรวจเสียง: '+msg+` · เสียงทั้งหมด ${n} · ภาษาไทย ${th}`;$('novoice').hidden=false;$('novoice').textContent='🔇 ไม่มีเสียงโจทย์: '+msg+' — แนะนำเปิดเกมในเบราว์เซอร์ Chrome หรือ Safari บนมือถือ/แท็บเล็ต และติดตั้งเสียงภาษาไทย (iPhone: การตั้งค่า › การช่วยการเข้าถึง › เนื้อหาที่พูด › เสียง › ไทย / Android: การตั้งค่า › ข้อความเป็นเสียงพูด › Google › ภาษาไทย)'}
+let thaiVoices=[],chosen=store.get('detective-voice',''),utt=null,speakId=0;
+const FEMALE=/kanya|premwadee|achara|narisa|female|woman|ผู้หญิง|google/i, MALE=/niwat|pattara|male|ชาย/i;
+function score(v){let s=0;if(FEMALE.test(v.name))s+=3;if(MALE.test(v.name))s-=5;if(/premium|enhanced|natural|neural/i.test(v.name))s+=2;if(v.localService)s+=1;return s}
+function loadVoices(){
+  let all=[];try{all=speechSynthesis.getVoices()}catch(e){}
+  thaiVoices=all.filter(v=>/^th/i.test(v.lang)).sort((a,b)=>score(b)-score(a));
+  const sel=$('voiceSel');
+  $('novoice').hidden=!(all.length&&!thaiVoices.length);
+  if(!thaiVoices.length){sel.innerHTML='<option>ไม่พบเสียงภาษาไทย</option>';sel.disabled=true;return}
+  sel.disabled=false;
+  sel.innerHTML=thaiVoices.map(v=>`<option value="${v.name}">${v.name}</option>`).join('');
+  if(!thaiVoices.some(v=>v.name===chosen))chosen=thaiVoices[0].name;
+  sel.value=chosen;
+}
+function speaking(on){document.querySelectorAll('.spk').forEach(b=>b.classList.toggle('on',on))}
+/* say(): must be called directly from a tap the first time (phones block speech otherwise) */
+function say(t,cb){voiceOK=true;const id=++speakId;let fired=false;const fire=()=>{if(fired)return;fired=true;cb&&cb()};
+  try{Voice.say(t,fire)}catch(e){}setTimeout(fire,Math.max(5000,t.length*230))}
+Voice.onstart=()=>speaking(true);Voice.onend=()=>speaking(false);
+try{loadVoices();speechSynthesis.onvoiceschanged=loadVoices}catch(e){}
+$('voiceSel').onchange=e=>{chosen=e.target.value;Voice.choose(chosen);say('สวัสดีค่ะ หนูพร้อมเป็นนักสืบหรือยังคะ')};
+$('testVoice').onclick=()=>{loadVoices();say('สวัสดีค่ะ หนูพร้อมเป็นนักสืบหรือยังคะ')};
+
+/* ---------- sounds ---------- */
+let ac;
+function tone(fs,dur,type,vol){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();
+  fs.forEach((f,i)=>{const o=ac.createOscillator(),g=ac.createGain(),t=ac.currentTime+i*.12;o.type=type||'sine';o.frequency.value=f;
+  g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(vol||.16,t+.03);g.gain.exponentialRampToValueAtTime(.0001,t+dur);o.connect(g).connect(ac.destination);o.start(t);o.stop(t+dur+.05)})}catch(e){}}
+const yay=()=>tone([523,659,784,1047],.35,'triangle');
+const boop=()=>tone([330,262],.25,'sine',.1);
+
+/* ---------- home ---------- */
+const starStr=n=>[0,1,2].map(i=>i<n?'★':'<span class="off">★</span>').join('');
+const unlocked=i=>has(i)&&(i===0||!!best[i-1]);
+function firstOpen(){for(let i=0;i<CASES.length;i++){if(has(i)&&!best[i])return unlocked(i)?i:-1}return has(0)?0:-1}
+function renderHome(){
+  const nowI=firstOpen();
+  const doneN=CASES.filter((c,k)=>has(k)&&best[k]).length;
+  $('progTxt').textContent=`ผ่านแล้ว ${doneN} จาก ${AVAIL.length} ข้อ`;
+  $('progBar').style.width=(AVAIL.length?doneN/AVAIL.length*100:0)+'%';
+  const total=Object.values(best1).reduce((a,b)=>a+b,0);
+  $('starsTotal').textContent='⭐ '+total;
+  const solved=CASES.filter((c,i)=>best[i]).length;
+  $('trophy').hidden=solved<CASES.length;
+  $('startTxt').textContent=(solved===0?'เล่นเลย':'เล่นต่อ ข้อ '+(nowI+1));
+}
+
+
+$('restart').onclick=()=>{if(has(0)&&(true))openCase(0)};
+$('startBtn').onclick=()=>{let i=firstOpen();if(i>=0&&CASES.every((c,k)=>!has(k)||best[k]))i=0;if(i<0)i=0;openCase(i)};
+const show=id=>['home','caseScreen'].forEach(s=>$(s).hidden=s!==id);
+
+/* ---------- case ---------- */
+function openCase(i){
+  token++;cur=i;mist=0;done=false;stage=1;
+  $('win').hidden=true;$('zoom').hidden=true;
+  const c=CASES[i];
+  $('where').innerHTML=`ข้อ ${i+1}<small>${c.title}</small>`;
+  $('q').textContent=c.q;
+  $('why').hidden=true;
+  $('lineup').innerHTML=`<img src="${imgF(i)}" alt="ผู้ต้องสงสัย 4 ตัว"><div class="hits">${c.sus.map((s,k)=>`<button class="sus" type="button" data-k="${k}" aria-label="${s.n}"></button>`).join('')}</div><div class="names">${c.sus.map(s=>`<span>${s.n}</span>`).join('')}</div>`;
+  show('caseScreen');$('caseScreen').scrollTop=0;
+  if(has(i+1)){new Image().src=imgS(i+1);new Image().src=imgF(i+1)}
+  say('เรื่องที่ '+(i+1)+' ... '+c.say+' ... ดูภาพดี ๆ แล้วแตะเลือกเพื่อน หนึ่งคน นะจ๊ะ');
+}
+$('lineup').addEventListener('click',e=>{
+  const b=e.target.closest('.sus');if(!b||done)return;
+  const c=CASES[cur],k=+b.dataset.k;
+  if(k===c.ans){done=true;b.classList.add('yes');$('why').textContent='✔ '+c.why;$('why').hidden=false;
+    win()}
+  else{mist++;boop();b.classList.remove('no');void b.offsetWidth;b.classList.add('no');say('อืม น้อง'+c.sus[k].n+'ทำแบบนี้ ยังไม่ดีนะจ๊ะ ลองเลือกใหม่อีกทีนะ')}
+});
+$('hintBtn').onclick=()=>{say('ใบ้ให้นะ ลองดูท่าทางของเพื่อน ๆ ทีละคน แล้วคิดว่า ถ้าเป็นหนู หนูจะทำแบบไหนดี');const r=$('ring');if(r){r.classList.remove('on');void r.offsetWidth;r.classList.add('on')}};
+$('sayBtn').onclick=()=>say(CASES[cur].say);
+$('zclose').onclick=()=>{$('zoom').hidden=true};
+
+function win(){
+  const c=CASES[cur],s=mist===0?3:mist===1?2:1;
+  best[cur]=Math.max(best[cur]||0,s);saveBest();
+  yay();confetti();
+  const my=token, nextI=cur+1, canNext=unlocked(nextI);
+  const msg=c.why;
+  $('winTitle').textContent=['','เก่งแล้ว!','เก่งมาก!','สุดยอด!'][s];
+  $('winStars').innerHTML=[0,1,2].map(k=>`<span class="${k<s?'on':''}">★</span>`).join('');
+  $('winWhy').textContent=msg;
+  $('nextBtn').textContent=canNext?'ไปต่อ ▶':'กลับหน้าแรก';
+  $('winBar').hidden=!canNext;
+  const t0=Date.now();
+  setTimeout(()=>{if(my!==token)return;const w=$('win');w.classList.remove('go');w.hidden=false;void w.offsetWidth;w.classList.add('go')},600);
+  const tail=canNext?' ไปข้อต่อไปกันเลย':(nextI>=CASES.length?' หนูเล่นครบทุกข้อแล้ว เก่งที่สุดเลยค่ะ':' ข้อต่อไปยังวาดไม่เสร็จนะคะ');
+  say('เก่งมากเลยค่ะ '+msg+tail,()=>{
+    if(!canNext)return;
+    setTimeout(()=>{if(my===token&&!$('caseScreen').hidden)openCase(nextI)},Math.max(800,6500-(Date.now()-t0)));
+  });
+}
+$('nextBtn').onclick=()=>{const n=cur+1;if(unlocked(n))openCase(n);else goHome()};
+function confetti(){
+  if(reduce)return;const set=['⭐','✨','🎉','🌟','💖'];
+  for(let i=0;i<22;i++){const s=document.createElement('span');s.className='conf';s.textContent=set[i%set.length];
+    s.style.left=Math.random()*100+'vw';s.style.animationDuration=(1.8+Math.random()*1.4)+'s';s.style.animationDelay=(Math.random()*.4)+'s';
+    document.body.appendChild(s);setTimeout(()=>s.remove(),3800)}
+}
+function goHome(){token++;$('zoom').hidden=true;$('win').hidden=true;try{speechSynthesis.cancel()}catch(e){};speaking(false);renderHome();show('home')}
+$('back').onclick=goHome;$('toHome').onclick=goHome;
+renderHome();
+/* greet: phones only allow speech after the first tap, so also greet on that first tap */
+let greeted=false;
+const greet=()=>{if(greeted||document.getElementById('home').hidden)return;greeted=true;say('สวัสดีจ้ะ คนเก่ง วันนี้มาดูกันว่าใครทำถูก ใครทำผิด กดปุ่มสีชมพูได้เลยนะ')};
+setTimeout(()=>{try{if(speechSynthesis.getVoices().length)greet()}catch(e){}},700);
+document.addEventListener('pointerdown',e=>{try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();ac.resume()}catch(_){}
+  if(!greeted&&$('home').hidden===false&&!e.target.closest('button,select,summary')){greet()}},{once:false,capture:true});
+</script>
+
+</body></html>
