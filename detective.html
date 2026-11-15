@@ -305,9 +305,9 @@ $('lineup').addEventListener('click',e=>{
   const c=CASES[cur],k=+b.dataset.k;
   if(k===c.ans){done=true;b.classList.add('yes');$('why').textContent='✔ '+c.why;$('why').hidden=false;
     win()}
-  else{mist++;boop();b.classList.remove('no');void b.offsetWidth;b.classList.add('no');say('อุ๊ย ไม่ใช่น้อง'+c.sus[k].n+'จ้ะ ลองมองหาเบาะแสอีกทีนะ')}
+  else{mist++;boop();b.classList.remove('no');void b.offsetWidth;b.classList.add('no');say('อุ๊ย ไม่ใช่น้อง'+c.sus[k].n+'จ้ะ ... ลองมองหาเบาะแสอีกทีนะ')}
 });
-$('hintBtn').onclick=()=>{say('ใบ้ให้นะ '+CASES[cur].hint);const r=$('ring');if(r){r.classList.remove('on');void r.offsetWidth;r.classList.add('on')}};
+$('hintBtn').onclick=()=>{say('ใบ้ให้นะ ... '+CASES[cur].hint);const r=$('ring');if(r){r.classList.remove('on');void r.offsetWidth;r.classList.add('on')}};
 $('sayBtn').onclick=()=>say(CASES[cur].say);
 $('scene').onclick=()=>{$('zs').innerHTML=`<img src="${imgS(cur)}" alt="ภาพขยาย">`;$('zoom').hidden=false;const z=$('zs');setTimeout(()=>{z.scrollLeft=(z.scrollWidth-z.clientWidth)/2},50)};
 $('zclose').onclick=()=>{$('zoom').hidden=true};
@@ -326,7 +326,7 @@ function win(){
   const t0=Date.now();
   setTimeout(()=>{if(my!==token)return;const w=$('win');w.classList.remove('go');w.hidden=false;void w.offsetWidth;w.classList.add('go')},600);
   const tail=canNext?' ไปข้อต่อไปกันเลย':(nextI>=CASES.length?' หนูเล่นครบทุกข้อแล้ว เก่งที่สุดเลยค่ะ':' ข้อต่อไปยังวาดไม่เสร็จนะคะ');
-  say('เก่งมากเลยค่ะ '+msg+tail,()=>{
+  say('เก่งมากเลยค่ะ ... '+msg+' ... '+tail,()=>{
     if(!canNext)return;
     setTimeout(()=>{if(my===token&&!$('caseScreen').hidden)openCase(nextI)},Math.max(800,6500-(Date.now()-t0)));
   });

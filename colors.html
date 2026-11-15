@@ -131,15 +131,15 @@ function addColor(k,btn){
   const d=document.createElement('div');d.className='drop';d.style.background=j.c;d.style.border=k==='w'?'2px solid #ddd':'';d.style.left=(r.left+r.width/2-13)+'px';d.style.top=(r.top)+'px';document.body.appendChild(d);
   requestAnimationFrame(()=>{d.style.transform=`translate(${b.left+b.width/2-(r.left+r.width/2)}px,${b.top+b.height*.5-r.top}px) scale(.7)`;d.style.opacity='.2'});
   setTimeout(()=>{d.remove();plop();const {nm,used}=update(true);
-    if(used.length>1)say('ว้าว '+used.join(' ผสมกับ ')+' กลายเป็น สี'+nm+' จ้ะ');else say('ใส่สี'+j.n+' ลงไปแล้ว ต่อไปจะใส่สีอะไรดีนะ');
+    if(used.length>1)say('ว้าว ... '+used.map(n=>'สี'+n).join(' ... ผสมกับ ... ')+' ... กลายเป็นสี'+nm+' จ้ะ');else say('ใส่สี'+j.n+' ลงไปแล้ว ... ต่อไปจะใส่สีอะไรดีนะ');
     if(mode==='quiz')check(nm)},560);
 }
 function check(nm){
   const g=GOALS[gi];
   if(nm===g.n){cheer('🎉');tone([523,659,784,1047],.3,'triangle');say('เก่งมาก ทำสี'+g.n+'ได้แล้ว '+g.need+' ได้สี'+g.n);$('next').hidden=false}
-  else if(Object.values(cnt).reduce((a,b)=>a+b,0)>=5&&nm!==g.n){say('ยังไม่ใช่สี'+g.n+'นะ ลองล้างถาดแล้วผสมใหม่');}
+  else if(Object.values(cnt).reduce((a,b)=>a+b,0)>=5&&nm!==g.n){say('ยังไม่ใช่สี'+g.n+'นะ ... ลองล้างถาดแล้วผสมใหม่');}
 }
-function setGoal(){const g=GOALS[gi];$('mDot').style.background=GOALC[g.n];$('mText').innerHTML=`ทำ <b>สี${g.n}</b> ให้ได้ไหม?`;$('next').hidden=true;say('ภารกิจ ทำสี'+g.n+'ให้ได้ไหมคะ')}
+function setGoal(){const g=GOALS[gi];$('mDot').style.background=GOALC[g.n];$('mText').innerHTML=`ทำ <b>สี${g.n}</b> ให้ได้ไหม?`;$('next').hidden=true;say('ภารกิจ ... ทำสี'+g.n+'ให้ได้ไหมคะ')}
 function setMode(m){mode=m;$('mFree').setAttribute('aria-pressed',m==='free');$('mQuiz').setAttribute('aria-pressed',m==='quiz');$('mission').hidden=m!=='quiz';clearBowl(true);
   if(m==='quiz'){gi=0;setGoal()}else{$('next').hidden=true;say('ผสมเล่นค่ะ แตะขวดสีแล้วดูว่าได้สีอะไร')}}
 function clearBowl(quiet){cnt={r:0,y:0,b:0,w:0,k:0};update(false);if(!quiet){say('ล้างถาดแล้ว');tone([880,660],.12)}}

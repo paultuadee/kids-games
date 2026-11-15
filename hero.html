@@ -100,10 +100,10 @@ function renderPanel(){
 }
 $('tabs').onclick=e=>{const b=e.target.closest('.tab');if(!b)return;tab=+b.dataset.i;renderTabs();renderPanel();pop();say('เลือก'+SETS[tab].t+'กันเลย')};
 $('panel').onclick=e=>{const o=e.target.closest('.opt');if(!o)return;const t=SETS[tab];S[t.k]=+o.dataset.v;delete S.pos[t.k];render();renderPanel();pop();
-  if(t.k==='base')say('ว้าว นี่คือฮีโร่'+t.names[S.base]);else if(t.k==='emb'&&S.emb>=0)say(heroName()+' มาแล้ว');else if(S[t.k]>=0)say('สวยจัง');};
-$('rnd').onclick=()=>{for(const t of SETS){S[t.k]=t.none&&Math.random()<.2?-1:Math.floor(Math.random()*t.n)}S.pos={};render();renderPanel();tone([392,523,659],.2);say('ตะแล้น '+heroName()+' แปลงร่างแล้ว')};
-$('flyBtn').onclick=()=>{const g=$('heroBox');g.classList.remove('fly');void g.offsetWidth;g.classList.add('fly');tone([330,440,660,880],.18,'triangle');say(heroName()+' บินได้แล้ว ฟิ้ว')};
-$('sayName').onclick=()=>say('นี่คือ '+heroName()+' ฮีโร่ของหนูเอง');
+  if(t.k==='base')say('ว้าว นี่คือ ... ฮีโร่'+t.names[S.base]);else if(t.k==='emb'&&S.emb>=0)say(heroName()+' ... มาแล้ว');else if(S[t.k]>=0)say('สวยจัง');};
+$('rnd').onclick=()=>{for(const t of SETS){S[t.k]=t.none&&Math.random()<.2?-1:Math.floor(Math.random()*t.n)}S.pos={};render();renderPanel();tone([392,523,659],.2);say('ตะแล้น ... '+heroName()+' ... แปลงร่างแล้ว')};
+$('flyBtn').onclick=()=>{const g=$('heroBox');g.classList.remove('fly');void g.offsetWidth;g.classList.add('fly');tone([330,440,660,880],.18,'triangle');say(heroName()+' ... บินได้แล้ว ฟิ้ว')};
+$('sayName').onclick=()=>say('นี่คือ ... '+heroName()+' ... ฮีโร่ของหนูเอง');
 /* drag stickers */
 let drag=null;
 $('heroBox').addEventListener('pointerdown',e=>{const s=e.target.closest('.stk');if(!s)return;e.preventDefault();s.setPointerCapture(e.pointerId);drag={el:s,k:s.dataset.k};s.classList.add('drag')});
