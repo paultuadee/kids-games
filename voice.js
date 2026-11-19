@@ -9,22 +9,22 @@
   const base=(document.currentScript&&document.currentScript.src||'').replace(/[^/]*$/,'');
   /* recorded clip map, loaded alongside this file */
   window.VOICE_CLIPS=window.VOICE_CLIPS||{};
-  let clipsLoaded=false,blobReady=false;const waiters=[];
-  const kick=()=>{if(clipsLoaded&&blobReady)waiters.splice(0).forEach(f=>f())};
-  try{const s=document.createElement('script');s.src=base+'audio/clips.js';s.onload=()=>{clipsLoaded=true;ensureSprite();kick()};s.onerror=()=>{clipsLoaded=true;blobReady=true;kick()};document.head.appendChild(s)}catch(e){clipsLoaded=true;blobReady=true}
-  /* wait (at most ms) until the recorded voice is ready */
-  function whenReady(ms,f){if(clipsLoaded&&blobReady){f();return}let done=false;const g=()=>{if(done)return;done=true;f()};waiters.push(g);setTimeout(g,ms)}
+  let clipsLoaded=false;const waiters=[];
+  const kick=()=>{if(clipsLoaded)waiters.splice(0).forEach(f=>f())};
+  try{const s=document.createElement('script');s.src=base+'audio/clips.js';s.onload=s.onerror=()=>{clipsLoaded=true;kick();setTimeout(prefetchAll,1500)};document.head.appendChild(s)}catch(e){clipsLoaded=true}
+  /* wait (at most ms) until the list of recordings has loaded (it is small) */
+  function whenReady(ms,f){if(clipsLoaded){f();return}let done=false;const g=()=>{if(done)return;done=true;f()};waiters.push(g);setTimeout(g,ms)}
   const keyOf=t=>t.replace(/[\s.,!?…]/g,'');
-  const player=new Audio();player.preload='auto';let spriteSet=false;
-  function ensureSprite(){if(spriteSet||!window.VOICE_SPRITE)return;spriteSet=true;const url=base+'audio/'+window.VOICE_SPRITE;player.src=url;try{player.load()}catch(e){}
-    /* keep a full in-memory copy so jumping to any line works on every host */
-    try{fetch(url).then(r=>r.ok?r.blob():null).then(b=>{if(b){const u=URL.createObjectURL(b);const swap=()=>{if(!player.paused){setTimeout(swap,300);return}player.src=u;try{player.load()}catch(e){}};swap()}blobReady=true;kick()}).catch(()=>{blobReady=true;kick()})}catch(e){blobReady=true;kick()}}
-  function preload(){ensureSprite()}
-  /* phones only allow sound after a tap: unlock the player on the first touch */
+  const urlOf=id=>base+'audio/'+id+'.mp3';
+  /* one shared player: phones unlock it on the first tap, then it can play every line */
+  const player=new Audio();player.preload='auto';
   let unlocked=false;
-  function unlock(){if(unlocked)return;unlocked=true;ensureSprite();try{player.muted=true;const p=player.play();const back=()=>{try{player.pause()}catch(e){}player.muted=false};if(p&&p.then)p.then(back,back);else back()}catch(e){player.muted=false}}
-  ['pointerdown','touchstart','click','keydown'].forEach(ev=>document.addEventListener(ev,unlock,{capture:true,once:false,passive:true}));
-
+  function unlock(){if(unlocked)return;unlocked=true;try{player.src=urlOf('v244');player.muted=true;const p=player.play();const back=()=>{try{player.pause()}catch(e){}player.muted=false};if(p&&p.then)p.then(back,back);else back()}catch(e){player.muted=false}}
+  ['pointerdown','touchstart','click','keydown'].forEach(ev=>document.addEventListener(ev,unlock,{capture:true,passive:true}));
+  /* quietly download every recording in the background so later lines start at once */
+  const warm={};
+  function prefetch(id){if(warm[id])return Promise.resolve();warm[id]=1;return fetch(urlOf(id)).then(r=>r.blob()).catch(()=>{})}
+  async function prefetchAll(){const C=window.VOICE_CLIPS,src=keyOf([...document.scripts].map(x=>x.textContent).join(' '));const ids=[...new Set(Object.keys(C).filter(k=>src.includes(k)).map(k=>C[k]))];for(const id of ids){await prefetch(id)}}
   function score(v){let s=0;const n=v.name;
     if(/premium|enhanced|natural|neural|wavenet|studio/i.test(n))s+=6;
     if(/google/i.test(n))s+=3;
@@ -58,20 +58,17 @@
       const p=ps[i++],last=i===ps.length;ttsOne(p,last,isQ,id,()=>setTimeout(next,last?0:(/[ะาีูอ]$/.test(p)?260:180)))};
     next();
   }
-  /* play one slice [start,dur] of the single voice.mp3 sprite */
-  function clipPiece(c,id,done,fallback){
-    ensureSprite();
-    const start=c[0],end=c[0]+c[1];let fin=false,tm=null,poll=null;
-    const f=()=>{if(fin)return;fin=true;clearTimeout(tm);clearInterval(poll);try{player.pause()}catch(e){}done()};
-    const go=()=>{if(fin||id!==runId){f();return}
-      try{player.currentTime=start}catch(e){}
-      setTimeout(()=>{ if(fin)return;
-        if(Math.abs(player.currentTime-start)>1.5){fin=true;clearTimeout(tm);clearInterval(poll);try{player.pause()}catch(e){}fallback();return}
-      },350);
-      const p=player.play();if(p&&p.catch)p.catch(()=>{if(!fin){fin=true;clearTimeout(tm);clearInterval(poll);fallback()}});
-      poll=setInterval(()=>{if(id!==runId||player.currentTime>=end-0.03)f()},40);
-      tm=setTimeout(f,c[1]*1000+2500)};
-    if(player.readyState>=1)go();else{let ok=false;const once=()=>{if(ok)return;ok=true;go()};player.addEventListener('loadedmetadata',once,{once:true});setTimeout(()=>{if(!ok){ok=true;go()}},3000)}
+  /* play one recorded line */
+  function clipPiece(id,rid,done,fallback){
+    let fin=false,tm=null;
+    const f=()=>{if(fin)return;fin=true;clearTimeout(tm);player.onended=player.onerror=null;done()};
+    const fb=()=>{if(fin)return;fin=true;clearTimeout(tm);player.onended=player.onerror=null;fallback()};
+    if(rid!==runId){f();return}
+    player.onended=f;player.onerror=fb;
+    player.src=urlOf(id);
+    const p=player.play();if(p&&p.catch)p.catch(fb);
+    tm=setTimeout(f,15000);
+    player.onloadedmetadata=()=>{clearTimeout(tm);tm=setTimeout(f,(player.duration||8)*1000+1500)};
   }
   function say(text,cb){
     const id=++runId;
@@ -86,7 +83,7 @@
       const go=()=>setTimeout(next,i<pieces.length?220:0);
       if(f)clipPiece(f,id,go,()=>ttsPiece(p,id,go));else{if(window.Voice.debug)console.log('[voice] no clip:',p);ttsPiece(p,id,go)}
     };
-    whenReady(8000,()=>{if(id===runId)next()});
+    whenReady(3000,()=>{if(id===runId)next()});
   }
   window.Voice={say,stop(){runId++;try{player.pause()}catch(e){}try{ss&&ss.cancel()}catch(e){}},
     list:()=>voices,current:()=>chosen,
